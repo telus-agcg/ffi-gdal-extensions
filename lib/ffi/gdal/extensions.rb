@@ -1,7 +1,7 @@
-require "ffi/gdal/extensions/version"
+require 'ffi/gdal/extensions/version'
 
-module Ffi
-  module Gdal
+module FFI
+  module GDAL
     module Extensions
       # Your code goes here...
     end
