@@ -28,6 +28,14 @@ Style/PercentLiteralDelimiters:
     '%w': '[]'
     '%W': '[]'
 
+Style/PredicateName:
+  Exclude:
+    # Bindata has problems with srid? since srid is a parsed attribute. #z? and
+    # m? could get around this but it seemed more important to keep the API
+    # consistent.
+    - lib/ogr/geometry_extensions/ewkb_record.rb
+    - lib/ogr/geometry_extensions/wkb_record.rb
+
 Style/SymbolArray:
   Enabled: true
 
