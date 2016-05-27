@@ -34,10 +34,10 @@ module FFI
     VARIANT_WKT_SFSQL     = 0x02
     VARIANT_WKT_EXTENDED  = 0x04
 
-    attach_function :lwgeom_from_wkt, [:string, :char], Geom.ptr
-    attach_function :lwgeom_from_wkb, [:pointer, :size_t, :char], Geom.ptr
-    attach_function :lwgeom_to_wkt, [Geom.ptr, :uint8_t, :int, :pointer], :string
-    attach_function :lwgeom_to_wkb, [Geom.ptr, :uint8_t, :pointer], :pointer
+    attach_function :lwgeom_from_wkt, [:string, :bool], Geom.ptr
+    attach_function :lwgeom_from_wkb, [:pointer, :size_t, :bool], Geom.ptr
+    attach_function :lwgeom_to_wkt, [Geom.ptr, :uint8, :int, :pointer], :string
+    attach_function :lwgeom_to_wkb, [Geom.ptr, :uint8, :pointer], :pointer
 
     attach_function :lwgeom_make_valid, [Geom.ptr], Geom.ptr
   end
