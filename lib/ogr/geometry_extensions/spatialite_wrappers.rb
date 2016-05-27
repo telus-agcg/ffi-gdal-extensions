@@ -1,4 +1,5 @@
 require 'ogr'
+require_relative '../../ffi/lwgeom'
 
 module OGR
   module GeometryExtensions
@@ -10,31 +11,11 @@ module OGR
       # @return [OGR::Geometry] Returns a new geometry, based on the MakeValid
       #   call.
       def make_valid
-        run_sql %[SELECT MakeValid(#{self_sql})]
-      end
-
-      private
-
-      def self_sql
-        %[GeomFromText('#{to_wkt}')]
-      end
-
-      # @param command [String] The SQL to run.
-      # @result [OGR::Geometry]
-      def run_sql(command)
-        result = nil
-
-        OGR::Driver.by_name('Memory').create_data_source('mem') do |ds|
-          layer = ds.execute_sql(command, nil, 'SQLITE')
-          feature_count = layer.feature_count
-          log "Got #{feature_count} geometries" if feature_count > 1
-
-          feature = layer.next_feature
-          result = feature.geometry.dup
-          ds.release_result_set(layer)
-        end
-
-        result
+        wkt = to_wkt
+        geom = FFI::LWGeom.lwgeom_from_wkt(wkt, wkt.length)
+        valid_geom = FFI::LWGeom.lwgeom_make_valid(geom)
+        valid_wkt = FFI::LWGeom.lwgeom_to_wkt(valid_geom, FFI::LWGeom::VARIANT_WKT_ISO, 16, nil)
+        OGR::Geometry.create_from_wkt(valid_wkt)
       end
     end
   end
