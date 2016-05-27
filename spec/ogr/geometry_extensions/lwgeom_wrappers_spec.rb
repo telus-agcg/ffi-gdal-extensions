@@ -1,6 +1,6 @@
-require 'ogr/geometry_extensions/spatialite_wrappers'
+require 'ogr/geometry_extensions/lwgeom_wrappers'
 
-RSpec.describe OGR::GeometryExtensions::SpatialiteWrappers do
+RSpec.describe OGR::GeometryExtensions::LWGeomWrappers do
   subject { OGR::Geometry.create_from_wkt(wkt) }
 
   shared_context 'shared point, no crossing' do
