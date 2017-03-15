@@ -15,7 +15,7 @@ header_dirs =
     '/opt/gdal/include',
     '/opt/include',
     '/Library/Frameworks/gdal.framework/unix/include',
-    '/usr/gdal/include',
+    '/usr/include/gdal',
     '/usr/include'
   ]
 lib_dirs =
@@ -38,11 +38,13 @@ dir_config('libs', header_dirs, lib_dirs)
 # The destination
 dir_config(extension_name)
 
-%w[gdal_alg gdal_alg_priv].each do |header_name|
+%w[gdal_alg gdal_alg_priv gdal].each do |header_name|
   unless find_header("#{header_name}.h")
     abort "#{header_name} is missing.  please install gdal headers"
   end
 end
+
+have_library('gdal', 'GDALRasterizeLayers', ['gdal_alg.h']) or abort 'missing gdal'
 
 # Do the work
 create_makefile(extension_name)

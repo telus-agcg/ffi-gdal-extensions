@@ -431,7 +431,7 @@ static void gv_rasterize_one_shape_agrian(
   switch (wkbFlatten(poShape->getGeometryType())) {
   case wkbPoint:
   case wkbMultiPoint:
-    GDALdllImagePoint(
+    GDALdllImagePoint_Agrian(
         sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]), &(aPointX[0]),
         &(aPointY[0]),
         (eBurnValueSrc == GBV_UserBurnValue) ? NULL : &(aPointVariant[0]),
@@ -440,13 +440,13 @@ static void gv_rasterize_one_shape_agrian(
   case wkbLineString:
   case wkbMultiLineString: {
     if (bAllTouched)
-      GDALdllImageLineAllTouched(
+      GDALdllImageLineAllTouched_Agrian(
           sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]),
           &(aPointX[0]), &(aPointY[0]),
           (eBurnValueSrc == GBV_UserBurnValue) ? NULL : &(aPointVariant[0]),
           gvBurnPoint_Agrian, &sInfo);
     else
-      GDALdllImageLine(
+      GDALdllImageLine_Agrian(
           sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]),
           &(aPointX[0]), &(aPointY[0]),
           (eBurnValueSrc == GBV_UserBurnValue) ? NULL : &(aPointVariant[0]),
@@ -455,13 +455,13 @@ static void gv_rasterize_one_shape_agrian(
 
   default: {
     if (eMergeAlg == GRMA_Count_Pixels_Agrian)
-      GDALdllImageFilledPolygon(
+      GDALdllImageFilledPolygon_Agrian(
           sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]),
           &(aPointX[0]), &(aPointY[0]),
           (eBurnValueSrc == GBV_UserBurnValue) ? NULL : &(aPointVariant[0]),
           gvCountPixels, &sInfo);
 
-    GDALdllImageFilledPolygon(
+    GDALdllImageFilledPolygon_Agrian(
         sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]), &(aPointX[0]),
         &(aPointY[0]),
         (eBurnValueSrc == GBV_UserBurnValue) ? NULL : &(aPointVariant[0]),
@@ -473,7 +473,7 @@ static void gv_rasterize_one_shape_agrian(
          the first segment. Should be removed when the code to full
          polygons more appropriately is added. */
       if (eBurnValueSrc == GBV_UserBurnValue) {
-        GDALdllImageLineAllTouched(
+        GDALdllImageLineAllTouched_Agrian(
             sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]),
             &(aPointX[0]), &(aPointY[0]), NULL, gvBurnPoint_Agrian, &sInfo);
       } else {
@@ -484,7 +484,7 @@ static void gv_rasterize_one_shape_agrian(
             aPointVariant[n++] = aPointVariant[0];
         }
 
-        GDALdllImageLineAllTouched(sInfo.nXSize, nYSize, aPartSize.size(),
+        GDALdllImageLineAllTouched_Agrian(sInfo.nXSize, nYSize, aPartSize.size(),
                                    &(aPartSize[0]), &(aPointX[0]),
                                    &(aPointY[0]), &(aPointVariant[0]),
                                    gvBurnPoint_Agrian, &sInfo);

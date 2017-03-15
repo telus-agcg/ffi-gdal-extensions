@@ -26,6 +26,33 @@ typedef struct {
   unsigned int *dataPixelCount;
 } GDALRasterizeInfo_Agrian;
 
+/************************************************************************/
+/*      Low level rasterizer API.                                       */
+/************************************************************************/
+
+void GDALdllImagePoint_Agrian( int nRasterXSize, int nRasterYSize,
+                        int nPartCount, int *panPartSize,
+                        double *padfX, double *padfY, double *padfVariant,
+                        llPointFunc pfnPointFunc, void *pCBData );
+
+void GDALdllImageLine_Agrian( int nRasterXSize, int nRasterYSize,
+                       int nPartCount, int *panPartSize,
+                       double *padfX, double *padfY, double *padfVariant,
+                       llPointFunc pfnPointFunc, void *pCBData );
+
+void GDALdllImageLineAllTouched_Agrian(int nRasterXSize, int nRasterYSize,
+                                int nPartCount, int *panPartSize,
+                                double *padfX, double *padfY,
+                                double *padfVariant,
+                                llPointFunc pfnPointFunc, void *pCBData );
+
+void GDALdllImageFilledPolygon_Agrian(int nRasterXSize, int nRasterYSize,
+                               int nPartCount, int *panPartSize,
+                               double *padfX, double *padfY,
+                               double *padfVariant,
+                               llScanlineFunc pfnScanlineFunc, void *pCBData );
+
+
 CPL_C_END
 
 #endif /* ndef GDAL_ALG_AGRIAN_PRIV_H_INCLUDED */
