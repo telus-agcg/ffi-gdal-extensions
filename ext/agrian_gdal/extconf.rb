@@ -15,6 +15,7 @@ header_dirs =
     '/opt/gdal/include',
     '/opt/include',
     '/Library/Frameworks/gdal.framework/unix/include',
+    '/usr/gdal/include',
     '/usr/include'
   ]
 lib_dirs =
