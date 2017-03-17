@@ -1,12 +1,14 @@
-require 'ffi/gdal/stuff'
+require 'ffi/agrian_gdal'
 
 module GDAL
   module DatasetMixins
-    # Wrappers for Warp algorithm methods defined in gdal_alg.h.
+    # Wrappers for Warp algorithm methods defined in gdal_alg_agrian.h.
     module AgrianAlgorithmMethods
       # @param band_numbers [Array<Fixnum>, Fixnum]
       # @param layers [Array<OGR::Layer>, OGR::Layer]
       # @param burn_values [Array<Float>, Float]
+      # @param pixel_divisor [Float] Divide rasterized values by this multiplied
+      # by the number of pixels
       # @param transformer [Proc]
       # @param options [Hash]
       # @option options attribute [String] An attribute field on features to be
@@ -18,11 +20,15 @@ module GDAL
       #   polygon or that are selected by Brezenham's line algorithm.  Defaults to
       #   +false+.
       # @option options burn_value_from ["Z"] Use the Z values of the geometries.
-      # @option @options merge_alg [String] "REPLACE" or "ADD".  REPLACE results
-      #   in overwriting of value, while ADD adds the new value to the existing
-      #   raster, suitable for heatmaps for instance.
+      # @option @options merge_alg [String] "REPLACE", "ADD", "MAX", or "WEIGHTED".
+      # REPLACE results in overwriting of value, while ADD adds the new value to the
+      # existing raster, suitable for heatmaps for instance.  MAX will take the largest
+      # overlapping value.  WEIGHTED will either add or replace based on the number of
+      # pixels that already have data for each feature.  If more than 80% of the pixels
+      # have data, it will add to the existing values.  Otherwise, it will divide the
+      # value by the ratio of nodata to total pixels and only update the nodata pixels.
       def rasterize_layers_agrian!(band_numbers, layers, burn_values, pixel_divisor = nil,
-                            transformer: nil, transform_arg: nil, **options, &progress_block)
+        transformer: nil, transform_arg: nil, **options, &progress_block)
         gdal_options = GDAL::Options.pointer(options)
         band_numbers = band_numbers.is_a?(Array) ? band_numbers : [band_numbers]
         log "band numbers: #{band_numbers}"
@@ -52,18 +58,18 @@ module GDAL
         # pixel_divisors_ptr.write_array_of_double(pixel_divisors)
         # log "burn value ptr null? #{burn_values_ptr.null?}"
 
-        FFI::GDAL::Stuff.GDALRasterizeLayers_Agrian(@c_pointer,      # hDS
-                                           band_numbers.size,                                # nBandCount
-                                           band_numbers_ptr,                                 # panBandList
-                                           layers.size,                                      # nLayerCount
-                                           layers_ptr,                                       # pahLayers
-                                           transformer,                                      # pfnTransformer
-                                           transform_arg,                                    # pTransformerArg
-                                           burn_values_ptr,                                  # padfLayerBurnValues
-                                           pixel_divisor.to_f,                                    # padfPixelDivisor
-                                           gdal_options,                                     # papszOptions
-                                           progress_block,                                   # pfnProgress
-                                           nil)                                              # pProgressArg
+        FFI::AgrianGDAL.GDALRasterizeLayers_Agrian(@c_pointer, # hDS
+          band_numbers.size,                                # nBandCount
+          band_numbers_ptr,                                 # panBandList
+          layers.size,                                      # nLayerCount
+          layers_ptr,                                       # pahLayers
+          transformer,                                      # pfnTransformer
+          transform_arg,                                    # pTransformerArg
+          burn_values_ptr,                                  # padfLayerBurnValues
+          pixel_divisor.to_f, # padfPixelDivisor
+          gdal_options,                                     # papszOptions
+          progress_block,                                   # pfnProgress
+          nil)                                              # pProgressArg
       end
     end
   end

@@ -30,28 +30,28 @@ typedef struct {
 /*      Low level rasterizer API.                                       */
 /************************************************************************/
 
-void GDALdllImagePoint_Agrian( int nRasterXSize, int nRasterYSize,
-                        int nPartCount, int *panPartSize,
-                        double *padfX, double *padfY, double *padfVariant,
-                        llPointFunc pfnPointFunc, void *pCBData );
+void GDALdllImagePoint_Agrian(int nRasterXSize, int nRasterYSize,
+                              int nPartCount, int *panPartSize, double *padfX,
+                              double *padfY, double *padfVariant,
+                              llPointFunc pfnPointFunc, void *pCBData);
 
-void GDALdllImageLine_Agrian( int nRasterXSize, int nRasterYSize,
-                       int nPartCount, int *panPartSize,
-                       double *padfX, double *padfY, double *padfVariant,
-                       llPointFunc pfnPointFunc, void *pCBData );
+void GDALdllImageLine_Agrian(int nRasterXSize, int nRasterYSize, int nPartCount,
+                             int *panPartSize, double *padfX, double *padfY,
+                             double *padfVariant, llPointFunc pfnPointFunc,
+                             void *pCBData);
 
 void GDALdllImageLineAllTouched_Agrian(int nRasterXSize, int nRasterYSize,
-                                int nPartCount, int *panPartSize,
-                                double *padfX, double *padfY,
-                                double *padfVariant,
-                                llPointFunc pfnPointFunc, void *pCBData );
+                                       int nPartCount, int *panPartSize,
+                                       double *padfX, double *padfY,
+                                       double *padfVariant,
+                                       llPointFunc pfnPointFunc, void *pCBData);
 
 void GDALdllImageFilledPolygon_Agrian(int nRasterXSize, int nRasterYSize,
-                               int nPartCount, int *panPartSize,
-                               double *padfX, double *padfY,
-                               double *padfVariant,
-                               llScanlineFunc pfnScanlineFunc, void *pCBData );
-
+                                      int nPartCount, int *panPartSize,
+                                      double *padfX, double *padfY,
+                                      double *padfVariant,
+                                      llScanlineFunc pfnScanlineFunc,
+                                      void *pCBData);
 
 CPL_C_END
 

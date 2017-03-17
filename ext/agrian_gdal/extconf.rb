@@ -44,7 +44,7 @@ dir_config(extension_name)
   end
 end
 
-have_library('gdal', 'GDALRasterizeLayers', ['gdal_alg.h']) or abort 'missing gdal'
+have_library('gdal', 'GDALRasterizeLayers', ['gdal_alg.h']) || abort('missing gdal')
 
 # Do the work
 create_makefile(extension_name)

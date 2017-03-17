@@ -484,10 +484,10 @@ static void gv_rasterize_one_shape_agrian(
             aPointVariant[n++] = aPointVariant[0];
         }
 
-        GDALdllImageLineAllTouched_Agrian(sInfo.nXSize, nYSize, aPartSize.size(),
-                                   &(aPartSize[0]), &(aPointX[0]),
-                                   &(aPointY[0]), &(aPointVariant[0]),
-                                   gvBurnPoint_Agrian, &sInfo);
+        GDALdllImageLineAllTouched_Agrian(
+            sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]),
+            &(aPointX[0]), &(aPointY[0]), &(aPointVariant[0]),
+            gvBurnPoint_Agrian, &sInfo);
       }
     }
   } break;
