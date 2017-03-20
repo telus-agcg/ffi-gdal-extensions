@@ -1,13 +1,13 @@
 /******************************************************************************
  * $Id$
  *
- * Project:  GDAL Image Processing Algorithms
- * Purpose:  Prototypes, and definitions for various GDAL based algorithms.
+ * Project:  GDAL
+ * Purpose:  Vector rasterization.
  * Author:   Frank Warmerdam, warmerdam@pobox.com
  *
  ******************************************************************************
- * Copyright (c) 2001, Frank Warmerdam
- * Copyright (c) 2008-2012, Even Rouault <even dot rouault at mines-paris dot
+ * Copyright (c) 2005, Frank Warmerdam <warmerdam@pobox.com>
+ * Copyright (c) 2008-2013, Even Rouault <even dot rouault at mines-paris dot
  *org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -29,36 +29,25 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
+#ifndef GDAL_RASTERIZE_ORIGINAL_H_INCLUDED
+#define GDAL_RASTERIZE_ORIGINAL_H_INCLUDED
+
+#include "gdal_alg_priv.h"
+#include "ogr_geometry.h"
+#include <vector>
+
 /******************************************************************************
- * Extracted from gdal_alg_h.  Changes noted in comments.
+ * Extracted from gdal_rasterize.cpp.  Unchanged except to remove static
+ *keyword.
  * See original source at:
- * https://github.com/OSGeo/gdal/blob/tags/1.11.5/gdal/alg/gdal_alg.h
+ * https://github.com/OSGeo/gdal/blob/tags/1.11.5/gdal/alg/llrasterize.cpp
  ****************************************************************************/
 
-#ifndef GDAL_ALG_AGRIAN_H_INCLUDED
-#define GDAL_ALG_AGRIAN_H_INCLUDED
+void GDALCollectRingsFromGeometry(OGRGeometry *poShape,
+                                  std::vector<double> &aPointX,
+                                  std::vector<double> &aPointY,
+                                  std::vector<double> &aPointVariant,
+                                  std::vector<int> &aPartSize,
+                                  GDALBurnValueSrc eBurnValueSrc);
 
-/**
- * \file gdal_alg_agrian.h
- *
- * Public (C callable) GDAL algorithm entry points, and definitions.
- */
-
-#ifndef DOXYGEN_SKIP
-#include "gdal_alg.h"
-#endif
-
-CPL_C_START
-
-/************************************************************************/
-/*      Rasterizer API - geometries burned into GDAL raster.            */
-/************************************************************************/
-CPLErr CPL_DLL GDALRasterizeLayers_Agrian(
-    GDALDatasetH hDS, int nBandCount, int *panBandList, int nLayerCount,
-    OGRLayerH *pahLayers, GDALTransformerFunc pfnTransformer,
-    void *pTransformArg, double *padfLayerBurnValues, double padfPixelDivisor,
-    char **papszOptions, GDALProgressFunc pfnProgress, void *pProgressArg);
-
-CPL_C_END
-
-#endif /* ndef GDAL_ALG_AGRIAN_H_INCLUDED */
+#endif /* ndef GDAL_RASTERIZE_ORIGINAL_H_INCLUDED */

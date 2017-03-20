@@ -29,9 +29,15 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
+/******************************************************************************
+ * See original source at:
+ * https://github.com/OSGeo/gdal/blob/tags/1.11.5/gdal/alg/gdalrasterize.cpp
+****************************************************************************/
+
 #include "gdal_alg_agrian.h"
 #include "gdal_alg_agrian_priv.h"
 #include "gdal_priv.h"
+#include "gdal_rasterize.h"
 #include "ogr_api.h"
 #include "ogr_geometry.h"
 #include "ogr_spatialref.h"
@@ -125,6 +131,7 @@ void gvBurnScanline_Agrian(void *pCBData, int nY, int nXStart, int nXEnd,
         int nPixels = nXEnd - nXStart + 1;
         while (nPixels-- > 0)
           *(pabyInsert++) += nBurnValue;
+        /* begin agrian changes */
       } else if (psInfo->eMergeAlg == GRMA_Max_Agrian) {
         int nPixels = nXEnd - nXStart + 1;
         while (nPixels-- > 0) {
@@ -138,6 +145,7 @@ void gvBurnScanline_Agrian(void *pCBData, int nY, int nXStart, int nXEnd,
             *(pabyInsert) = nBurnValue;
           pabyInsert++;
         }
+        /* end agrian changes */
       } else {
         memset(pabyInsert, nBurnValue, nXEnd - nXStart + 1);
       }
@@ -157,6 +165,7 @@ void gvBurnScanline_Agrian(void *pCBData, int nY, int nXStart, int nXEnd,
       if (psInfo->eMergeAlg == GRMA_Add_Agrian) {
         while (nPixels-- > 0)
           *(padfInsert++) += dfBurnValue;
+        /* begin agrian changes */
       } else if (psInfo->eMergeAlg == GRMA_Max_Agrian) {
         while (nPixels-- > 0) {
           *(padfInsert++) = std::max(dfBurnValue, *(padfInsert));
@@ -168,6 +177,7 @@ void gvBurnScanline_Agrian(void *pCBData, int nY, int nXStart, int nXEnd,
             *(padfInsert) = dfBurnValue;
           padfInsert++;
         }
+        /* end agrian changes */
       } else {
         while (nPixels-- > 0)
           *(padfInsert++) = dfBurnValue;
@@ -203,6 +213,7 @@ void gvBurnPoint_Agrian(void *pCBData, int nY, int nX, double dfVariant)
                             ((psInfo->eBurnValueSource == GBV_UserBurnValue)
                                  ? 0
                                  : dfVariant));
+        /* begin agrian changes */
       } else if (psInfo->eMergeAlg == GRMA_Max_Agrian) {
         *pbyInsert = std::max(
             *pbyInsert,
@@ -210,6 +221,7 @@ void gvBurnPoint_Agrian(void *pCBData, int nY, int nX, double dfVariant)
                             ((psInfo->eBurnValueSource == GBV_UserBurnValue)
                                  ? 0
                                  : dfVariant)));
+        /* end agrian changes */
       } else {
         *pbyInsert =
             (unsigned char)(psInfo->padfBurnValue[iBand] +
@@ -228,12 +240,14 @@ void gvBurnPoint_Agrian(void *pCBData, int nY, int nX, double dfVariant)
         *pdfInsert +=
             (psInfo->padfBurnValue[iBand] +
              ((psInfo->eBurnValueSource == GBV_UserBurnValue) ? 0 : dfVariant));
+        /* begin agrian changes */
       } else if (psInfo->eMergeAlg == GRMA_Max_Agrian) {
         *pdfInsert = std::max(
             *pdfInsert,
             (psInfo->padfBurnValue[iBand] +
              ((psInfo->eBurnValueSource == GBV_UserBurnValue) ? 0
                                                               : dfVariant)));
+        /* end agrian changes */
       } else {
         *pdfInsert =
             (psInfo->padfBurnValue[iBand] +
@@ -246,117 +260,6 @@ void gvBurnPoint_Agrian(void *pCBData, int nY, int nX, double dfVariant)
 }
 
 /************************************************************************/
-/*                    GDALCollectRingsFromGeometry()                    */
-/************************************************************************/
-
-static void GDALCollectRingsFromGeometry(OGRGeometry *poShape,
-                                         std::vector<double> &aPointX,
-                                         std::vector<double> &aPointY,
-                                         std::vector<double> &aPointVariant,
-                                         std::vector<int> &aPartSize,
-                                         GDALBurnValueSrc eBurnValueSrc)
-
-{
-  if (poShape == NULL)
-    return;
-
-  OGRwkbGeometryType eFlatType = wkbFlatten(poShape->getGeometryType());
-  int i;
-
-  if (eFlatType == wkbPoint) {
-    OGRPoint *poPoint = (OGRPoint *)poShape;
-    int nNewCount = aPointX.size() + 1;
-
-    aPointX.reserve(nNewCount);
-    aPointY.reserve(nNewCount);
-    aPointX.push_back(poPoint->getX());
-    aPointY.push_back(poPoint->getY());
-    aPartSize.push_back(1);
-    if (eBurnValueSrc != GBV_UserBurnValue) {
-      /*switch( eBurnValueSrc )
-      {
-      case GBV_Z:*/
-      aPointVariant.reserve(nNewCount);
-      aPointVariant.push_back(poPoint->getZ());
-      /*break;
-  case GBV_M:
-      aPointVariant.reserve( nNewCount );
-      aPointVariant.push_back( poPoint->getM() );
-  }*/
-    }
-  } else if (eFlatType == wkbLineString) {
-    OGRLineString *poLine = (OGRLineString *)poShape;
-    int nCount = poLine->getNumPoints();
-    int nNewCount = aPointX.size() + nCount;
-
-    aPointX.reserve(nNewCount);
-    aPointY.reserve(nNewCount);
-    if (eBurnValueSrc != GBV_UserBurnValue)
-      aPointVariant.reserve(nNewCount);
-    for (i = nCount - 1; i >= 0; i--) {
-      aPointX.push_back(poLine->getX(i));
-      aPointY.push_back(poLine->getY(i));
-      if (eBurnValueSrc != GBV_UserBurnValue) {
-        /*switch( eBurnValueSrc )
-        {
-            case GBV_Z:*/
-        aPointVariant.push_back(poLine->getZ(i));
-        /*break;
-    case GBV_M:
-        aPointVariant.push_back( poLine->getM(i) );
-}*/
-      }
-    }
-    aPartSize.push_back(nCount);
-  } else if (EQUAL(poShape->getGeometryName(), "LINEARRING")) {
-    OGRLinearRing *poRing = (OGRLinearRing *)poShape;
-    int nCount = poRing->getNumPoints();
-    int nNewCount = aPointX.size() + nCount;
-
-    aPointX.reserve(nNewCount);
-    aPointY.reserve(nNewCount);
-    if (eBurnValueSrc != GBV_UserBurnValue)
-      aPointVariant.reserve(nNewCount);
-    for (i = nCount - 1; i >= 0; i--) {
-      aPointX.push_back(poRing->getX(i));
-      aPointY.push_back(poRing->getY(i));
-    }
-    if (eBurnValueSrc != GBV_UserBurnValue) {
-      /*switch( eBurnValueSrc )
-      {
-      case GBV_Z:*/
-      aPointVariant.push_back(poRing->getZ(i));
-      /*break;
-  case GBV_M:
-      aPointVariant.push_back( poRing->getM(i) );
-  }*/
-    }
-    aPartSize.push_back(nCount);
-  } else if (eFlatType == wkbPolygon) {
-    OGRPolygon *poPolygon = (OGRPolygon *)poShape;
-
-    GDALCollectRingsFromGeometry(poPolygon->getExteriorRing(), aPointX, aPointY,
-                                 aPointVariant, aPartSize, eBurnValueSrc);
-
-    for (i = 0; i < poPolygon->getNumInteriorRings(); i++)
-      GDALCollectRingsFromGeometry(poPolygon->getInteriorRing(i), aPointX,
-                                   aPointY, aPointVariant, aPartSize,
-                                   eBurnValueSrc);
-  }
-
-  else if (eFlatType == wkbMultiPoint || eFlatType == wkbMultiLineString ||
-           eFlatType == wkbMultiPolygon || eFlatType == wkbGeometryCollection) {
-    OGRGeometryCollection *poGC = (OGRGeometryCollection *)poShape;
-
-    for (i = 0; i < poGC->getNumGeometries(); i++)
-      GDALCollectRingsFromGeometry(poGC->getGeometryRef(i), aPointX, aPointY,
-                                   aPointVariant, aPartSize, eBurnValueSrc);
-  } else {
-    CPLDebug("GDAL", "Rasterizer ignoring non-polygonal geometry.");
-  }
-}
-
-/************************************************************************/
 /*                       gv_rasterize_one_shape_agrian() */
 /************************************************************************/
 static void gv_rasterize_one_shape_agrian(
@@ -365,6 +268,7 @@ static void gv_rasterize_one_shape_agrian(
     double *padfBurnValue, GDALBurnValueSrc eBurnValueSrc,
     GDALRasterMergeAlg_Agrian eMergeAlg, GDALTransformerFunc pfnTransformer,
     void *pTransformArg, unsigned int *totalPixelCount,
+    /* agrian change -- add additional parameter */
     unsigned int *dataPixelCount)
 
 {
@@ -381,8 +285,10 @@ static void gv_rasterize_one_shape_agrian(
   sInfo.padfBurnValue = padfBurnValue;
   sInfo.eBurnValueSource = eBurnValueSrc;
   sInfo.eMergeAlg = eMergeAlg;
+  /* begin agrian change */
   sInfo.dataPixelCount = dataPixelCount;
   sInfo.totalPixelCount = totalPixelCount;
+  /* end agrian change */
 
   /* -------------------------------------------------------------------- */
   /*      Transform polygon geometries into a set of rings and a part     */
@@ -454,12 +360,14 @@ static void gv_rasterize_one_shape_agrian(
   } break;
 
   default: {
+    /* begin agrian change*/
     if (eMergeAlg == GRMA_Count_Pixels_Agrian)
       GDALdllImageFilledPolygon_Agrian(
           sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]),
           &(aPointX[0]), &(aPointY[0]),
           (eBurnValueSrc == GBV_UserBurnValue) ? NULL : &(aPointVariant[0]),
           gvCountPixels, &sInfo);
+    /* end agrian change */
 
     GDALdllImageFilledPolygon_Agrian(
         sInfo.nXSize, nYSize, aPartSize.size(), &(aPartSize[0]), &(aPointX[0]),
@@ -498,7 +406,8 @@ static void gv_rasterize_one_shape_agrian(
 /*                        GDALRasterizeOptions_Agrian() */
 /*                                                                      */
 /*      Recognise a few rasterize options used by all three entry       */
-/*      points.                                                         */
+/*      points.  Same as GDALRasterizeOptions; only MAX and WEIGHTED    */
+/*      were added.                                                     */
 /************************************************************************/
 
 static CPLErr
@@ -530,10 +439,12 @@ GDALRasterizeOptions_Agrian(char **papszOptions, int *pbAllTouched,
       *peMergeAlg = GRMA_Add_Agrian;
     else if (EQUAL(pszOpt, "REPLACE"))
       *peMergeAlg = GRMA_Replace_Agrian;
+    /* begin agrian change */
     else if (EQUAL(pszOpt, "MAX"))
       *peMergeAlg = GRMA_Max_Agrian;
     else if (EQUAL(pszOpt, "WEIGHTED"))
       *peMergeAlg = GRMA_Weighted_Agrian;
+    /* end agrian change */
     else {
       CPLError(CE_Failure, CPLE_AppDefined,
                "Unrecognised value '%s' for MERGE_ALG.", pszOpt);
@@ -544,15 +455,18 @@ GDALRasterizeOptions_Agrian(char **papszOptions, int *pbAllTouched,
   return CE_None;
 }
 
-/************************************************************************/
-/*                        GDALCountPixelOverlaps()                         */
-/************************************************************************/
+/*************************************************************************/
+/*               GDALCountPixelOverlaps() (new Agrian function)          */
+/*************************************************************************/
 
 /**
- * Burn geometries from the specified list of layers into raster.
+ * Count total number of pixels that overlap a layer as well as number of
+ * that have already been redneered. The layers are passed as an array of
+ * OGRLayerH handlers.  nPixels and nDataPixels will be updated with the
+ * counts.
  *
- * Rasterize all the geometric objects from a list of layers into a raster
- * dataset.  The layers are passed as an array of OGRLayerH handlers.
+ * Much of this is copied from GDAL RasterizeLayers.
+ *
  *
  * If the geometries are in the georferenced coordinates of the raster
  * dataset, then the pfnTransform may be passed in NULL and one will be
@@ -562,47 +476,20 @@ GDALRasterizeOptions_Agrian(char **papszOptions, int *pbAllTouched,
  *
  * The output raster may be of any GDAL supported datatype, though currently
  * internally the burning is done either as GDT_Byte or GDT_Float32.  This
- * may be improved in the future.  An explicit list of burn values for
- * each layer for each band must be passed in.
+ * may be improved in the future.
  *
  * @param hDS output data, must be opened in update mode.
- * @param nBandCount the number of bands to be updated.
- * @param panBandList the list of bands to be updated.
- * @param nLayerCount the number of layers being passed in pahLayers array.
- * @param pahLayers the array of layers to burn in.
+ * @param poLayer layer to count overlaps for
  * @param pfnTransformer transformation to apply to geometries to put into
  * pixel/line coordinates on raster.  If NULL a geotransform based one will
  * be created internally.
  * @param pTransformArg callback data for transformer.
- * @param padfLayerBurnValues the array of values to burn into the raster.
- * There should be nBandCount values for each layer.
- * @param papszOptions special options controlling rasterization:
- * <dl>
- * <dt>"ATTRIBUTE":</dt> <dd>Identifies an attribute field on the features to be
- * used for a burn in value. The value will be burned into all output
- * bands. If specified, padfLayerBurnValues will not be used and can be a NULL
- * pointer.</dd>
- * <dt>"CHUNKYSIZE":</dt> <dd>The height in lines of the chunk to operate on.
- * The larger the chunk size the less times we need to make a pass through all
- * the shapes. If it is not set or set to zero the default chunk size will be
- * used. Default size will be estimated based on the GDAL cache buffer size
- * using formula: cache_size_bytes/scanline_size_bytes, so the chunk will
- * not exceed the cache.</dd>
- * <dt>"ALL_TOUCHED":</dt> <dd>May be set to TRUE to set all pixels touched
- * by the line or polygons, not just those whose center is within the polygon
- * or that are selected by brezenhams line algorithm.  Defaults to FALSE.</dd>
- * <dt>"BURN_VALUE_FROM":</dt> <dd>May be set to "Z" to use the Z values of the
- * geometries. The value from padfLayerBurnValues or the attribute field value
- * is added to this before burning. In default case dfBurnValue is burned as it
- * is. This is implemented properly only for points and lines for now. Polygons
- * will be burned using the Z value from the first point. The M value may be
- * supported in the future.</dd>
- * <dt>"MERGE_ALG":</dt> <dd>May be REPLACE (the default) or ADD.  REPLACE
- * results in overwriting of value, while ADD adds the new value to the existing
- * raster, suitable for heatmaps for instance.</dd>
- * </dl>
+ * @param bAllTouched whether to count all touched pixels.
  * @param pfnProgress the progress function to report completion.
  * @param pProgressArg callback data for progress function.
+ * @param nPixels unsigned int* number that intersect the feature
+ * @param nDAtaPixels unsigned int* number of pixels that intersect the feature
+ * that have nonzero values.
  *
  * @return CE_None on success or CE_Failure on error.
  */
@@ -809,6 +696,8 @@ CPLErr GDALRasterizeLayers_Agrian(
     char **papszOptions, GDALProgressFunc pfnProgress, void *pProgressArg)
 
 {
+  /* agrian change -- there was some preprocessor stuff for OGR_ENABLED
+  *  that was removed */
   GDALDataType eType;
   unsigned char *pabyChunkBuf;
   GDALDataset *poDS = (GDALDataset *)hDS;
@@ -904,13 +793,14 @@ CPLErr GDALRasterizeLayers_Agrian(
 
   pfnProgress(0.0, NULL, pProgressArg);
 
-  unsigned int iShape;
-
+  /* begin agrian change */
+  // declare stuff for counting pixels
   unsigned int *nPixels;
   unsigned int *nDataPixels;
 
   if (eErr != CE_None)
     return eErr;
+  /* end agrian change */
 
   for (iLayer = 0; iLayer < nLayerCount; iLayer++) {
     int iBurnField = -1;
@@ -928,13 +818,19 @@ CPLErr GDALRasterizeLayers_Agrian(
     /*      Do not force the feature count, so if driver doesn't know       */
     /*      exact number of features, go down the normal way.               */
     /* -------------------------------------------------------------------- */
+    /* begin agrian change */
+    // get full geom count instead of simply whether dataset is empty
     unsigned int nGeomCount = poLayer->GetFeatureCount(TRUE);
 
     if (nGeomCount == 0)
       continue;
 
+    /* Allocate arrays for counting pixels.  Consider only allocating a set
+     * number of length each time and expanding as needed.
+     */
     nPixels = new unsigned int[nGeomCount]();
     nDataPixels = new unsigned int[nGeomCount]();
+    /* end agrian change */
 
     if (pszBurnAttribute) {
       iBurnField = poLayer->GetLayerDefn()->GetFieldIndex(pszBurnAttribute);
@@ -942,8 +838,12 @@ CPLErr GDALRasterizeLayers_Agrian(
         CPLError(CE_Warning, CPLE_AppDefined,
                  "Failed to find field %s on layer %s, skipping.\n",
                  pszBurnAttribute, poLayer->GetLayerDefn()->GetName());
+        /* begin agrian change */
+        // different exit point here, so need to clean up dynamically allocated
+        // stuff
         delete[] nPixels;
         delete[] nDataPixels;
+        /* end agrian change */
         continue;
       }
     } else
@@ -977,10 +877,12 @@ CPLErr GDALRasterizeLayers_Agrian(
       CPLFree(pszProjection);
     }
 
+    /* begin agrian change -- count pixel overlaps if needed */
     if (eMergeAlg == GRMA_Weighted_Agrian)
       eErr = GDALCountPixelOverlaps(hDS, poLayer, pfnTransformer, pTransformArg,
                                     bAllTouched, pszYChunkSize, pfnProgress,
                                     pProgressArg, nPixels, nDataPixels);
+    /* end agrian change */
 
     OGRFeature *poFeat;
 
@@ -1010,7 +912,8 @@ CPLErr GDALRasterizeLayers_Agrian(
 
       double *padfAttrValues = (double *)VSIMalloc(sizeof(double) * nBandCount);
 
-      iShape = 0;
+      /* agrian change -- keep track of current feature index */
+      unsigned int iShape = 0;
 
       while ((poFeat = poLayer->GetNextFeature()) != NULL) {
         OGRGeometry *poGeom = poFeat->GetGeometryRef();
@@ -1026,6 +929,7 @@ CPLErr GDALRasterizeLayers_Agrian(
           padfBurnValues = padfAttrValues;
         }
 
+        /* begin agrian change */
         GDALRasterMergeAlg_Agrian eMergeAlgCurrent = eMergeAlg;
         if (eMergeAlg == GRMA_Weighted_Agrian) {
           // ratio is the percentage of pixels that were not yet written
@@ -1052,7 +956,9 @@ CPLErr GDALRasterizeLayers_Agrian(
                 padfAttrValues[iBand] /= (dfPixelDivisor * nPixels[iShape]);
           }
         }
+        /* end agrian change */
 
+        /* agrian change -- added nPixels and nDataPixels parameters */
         gv_rasterize_one_shape_agrian(
             pabyChunkBuf, iY, poDS->GetRasterXSize(), nThisYChunkSize,
             nBandCount, eType, bAllTouched, poGeom, padfBurnValues,
@@ -1087,8 +993,11 @@ CPLErr GDALRasterizeLayers_Agrian(
       pfnTransformer = NULL;
     }
 
+    /* begin agrian change */
+    // cleanup dynamically allocated stuff
     delete[] nPixels;
     delete[] nDataPixels;
+    /* end agrian change */
   }
 
   /* -------------------------------------------------------------------- */

@@ -28,6 +28,12 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
+/******************************************************************************
+ * The bodies of these functions are unchanged from gdal source.
+ * See original source at:
+ * https://github.com/OSGeo/gdal/blob/tags/1.11.5/gdal/alg/llrasterize.cpp
+ ****************************************************************************/
+
 #include "gdal_alg.h"
 #include "gdal_alg_agrian_priv.h"
 #include "gdal_alg_priv.h"
@@ -43,7 +49,7 @@ static void llSwapDouble(double *a, double *b) {
 }
 
 /************************************************************************/
-/*                       dllImageFilledPolygon_Agrian() */
+/*                       dllImageFilledPolygon_Agrian()                 */
 /*                                                                      */
 /*      Perform scanline conversion of the passed multi-ring            */
 /*      polygon.  Note the polygon does not need to be explicitly       */
