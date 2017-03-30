@@ -94,6 +94,10 @@ void gvCountPixels(void *pCBData, int nY, int nXStart, int nXEnd,
   }
 }
 
+/*
+  Added weighted and max algorithms. Changes from GDAL source surrounded by
+  comments.
+*/
 void gvBurnScanline_Agrian(void *pCBData, int nY, int nXStart, int nXEnd,
                            double dfVariant)
 
