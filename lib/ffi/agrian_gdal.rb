@@ -4,7 +4,7 @@ module FFI
   module AgrianGDAL
     extend ::FFI::Library
 
-    ffi_lib File.expand_path('../../agrian_gdal/agrian_gdal.so', __FILE__)
+    ffi_lib File.expand_path('../../agrian_gdal.so', __FILE__)
 
     attach_function :GDALRasterizeLayers_Agrian,
                     [

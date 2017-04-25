@@ -2,6 +2,10 @@
 
 Format for this file derived from [http://keepachangelog.com](http://keepachangelog.com).
 
+## 0.2.1 / 2017-04-25
+
+* Fix require path to point to where gem install puts native extensions.
+
 ## 0.2.0 / 2017-03-17
 
 * Add additional rasterization algorithms weighted and max.
