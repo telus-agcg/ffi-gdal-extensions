@@ -11,5 +11,5 @@ task spec: :compile
 CLEAN.include('ext/**/Makefile', 'ext/**/*.{o,so}', 'lib/**/*.{o,so}')
 
 Rake::ExtensionTask.new 'agrian_gdal' do |ext|
-  ext.lib_dir = 'lib'
+  ext.lib_dir = 'lib/agrian_gdal'
 end
