@@ -11,7 +11,7 @@ module FFI
       lib_file_name = "#{lib}.#{FFI::Platform::LIBSUFFIX}*"
 
       if ENV['LWGEOM_LIBRARY_PATH']
-        return (Dir.glob(File.join(ENV['LWGEOM_LIBRARY_PATH'], lib_file_name))).first
+        return Dir.glob(File.join(ENV['LWGEOM_LIBRARY_PATH'], lib_file_name))
       end
 
       FFI::GDAL.search_paths.flat_map do |search_path|

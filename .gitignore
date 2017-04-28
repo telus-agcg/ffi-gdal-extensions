@@ -16,12 +16,5 @@ spec/examples.txt
 
 .ruby-version
 
-# Ignore compiled binaries
-lib/**/*.so
-ext/**/*.so
-ext/**/*.o
-ext/**/*.log
-ext/**/Makefile
-
 # Ignore project files
 .idea/
