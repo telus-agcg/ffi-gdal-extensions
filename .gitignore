@@ -7,14 +7,13 @@
 /pkg/
 /spec/reports/
 /tmp/
+!/tmp/.keep
 
 .byebug_history
 
 tags
 
 spec/examples.txt
-
-.ruby-version
 
 # Ignore project files
 .idea/

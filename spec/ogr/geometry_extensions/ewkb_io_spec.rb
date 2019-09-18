@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ogr/geometry_extensions/ewkb_io'
 
 RSpec.describe OGR::Geometry do

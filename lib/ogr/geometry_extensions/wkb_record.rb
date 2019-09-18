@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bindata'
 require 'ffi-gdal'
 require 'ogr'
@@ -9,7 +11,7 @@ module OGR
     #
     # @see {{OGR::GeometryExtensions::EWKBRecord}}
     class WKBRecord < BinData::Record
-      uint8 :endianness, assert: -> { value == 0 || value == 1 }
+      uint8 :endianness, assert: -> { [0, 1].include?(value) }
 
       # Choose the type based on the endianness
       choice :wkb_type, selection: :endianness do
@@ -41,7 +43,7 @@ module OGR
       end
 
       # @return [Boolean] Is the Z flag set?
-      def has_z?
+      def has_z? # rubocop:disable Naming/PredicateName
         geometry_type & WKB_Z != 0
       end
 
