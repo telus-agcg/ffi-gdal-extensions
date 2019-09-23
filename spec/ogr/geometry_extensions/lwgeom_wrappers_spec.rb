@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ogr/geometry_extensions/lwgeom_wrappers'
 
 RSpec.describe OGR::GeometryExtensions::LWGeomWrappers do
@@ -29,9 +31,9 @@ RSpec.describe OGR::GeometryExtensions::LWGeomWrappers do
       include_context 'crossing lines'
 
       it 'makes a valid MULTIPOLYGON' do
-        result_wkt = 'MULTIPOLYGON (((0 0,0 10,3.333333333333333 6.666666666666667,0 0)),' \
+        result_wkt = 'MULTIPOLYGON (((0 0,0 10,3.33333333333333 6.66666666666667,0 0)),' \
           '((5 5,10 0,5 0,5 5)),' \
-          '((5 5,3.333333333333333 6.666666666666667,5 10,5 5)))'
+          '((5 5,3.33333333333333 6.66666666666667,5 10,5 5)))'
         expect(subject.make_valid.to_wkt).to eq(result_wkt)
       end
     end

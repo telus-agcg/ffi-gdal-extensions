@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ogr/geometry_extensions/wkb_record'
 
 RSpec.describe OGR::GeometryExtensions::WKBRecord do

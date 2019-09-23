@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module FFI
   module GDAL
     module Extensions
-      VERSION = '0.1.1'.freeze
+      VERSION = '0.2.0'
     end
   end
 end

@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require 'bindata'
 require 'ffi-gdal'
 require 'ogr'
 require_relative 'wkb_record'
 
+# rubocop:disable Naming/PredicateName
 module OGR
   module GeometryExtensions
     # Parses raw EWKB and turns into a data structure. Only really exists for
@@ -11,7 +14,7 @@ module OGR
     # @see http://trac.osgeo.org/postgis/browser/trunk/doc/ZMSgeoms.txt
     # @see {{OGR::GeometryExtensions::EWKBRecord}}
     class EWKBRecord < BinData::Record
-      uint8 :endianness, assert: -> { value == 0 || value == 1 }
+      uint8 :endianness, assert: -> { [0, 1].include?(value) }
 
       # Choose the type based on the endianness.
       choice :wkb_type, selection: :endianness do
@@ -88,3 +91,4 @@ module OGR
     end
   end
 end
+# rubocop:enable Naming/PredicateName

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ffi-gdal'
 require 'ogr'
 require_relative 'ewkb_record'
@@ -7,7 +9,7 @@ module OGR
   module GeometryExtensions
     # Extends OGR::Geometry with methods that allow creating a Geometry from
     # EKWB or outputting a Geometry as EWKB (EWKB is the WKB format that PostGIS
-    # uses). 
+    # uses).
     module EWKBIO
       # Methods to extend OGR::Geometry with.
       module ClassMethods
@@ -40,8 +42,4 @@ module OGR
   end
 end
 
-module OGR
-  module Geometry
-    include OGR::GeometryExtensions::EWKBIO
-  end
-end
+OGR::Geometry.include OGR::GeometryExtensions::EWKBIO

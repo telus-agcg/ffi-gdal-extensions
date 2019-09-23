@@ -1,20 +1,24 @@
-Metrics/ClassLength:
-  Max: 300
+---
+inherit_from: .rubocop_todo.yml
+
+Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*_spec.rb
 
 Metrics/LineLength:
   Max: 120
 
-Metrics/MethodLength:
-  Max: 20
-
-Style/AlignParameters:
-  EnforcedStyle: with_fixed_indentation
+Naming/UncommunicativeMethodParamName:
+  AllowedNames: [x, y, z]
 
 Style/Documentation:
   Enabled: false
-
-Style/DotPosition:
-  EnforcedStyle: trailing
 
 Style/DoubleNegation:
   Enabled: false
@@ -28,22 +32,12 @@ Style/PercentLiteralDelimiters:
     '%w': '[]'
     '%W': '[]'
 
-Style/PredicateName:
-  Exclude:
-    # Bindata has problems with srid? since srid is a parsed attribute. #z? and
-    # m? could get around this but it seemed more important to keep the API
-    # consistent.
-    - lib/ogr/geometry_extensions/ewkb_record.rb
-    - lib/ogr/geometry_extensions/wkb_record.rb
-
 Style/SymbolArray:
   Enabled: true
 
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  Include:
-    - Gemfile
   Exclude:
     - vendor/bundle/**/*
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.6
