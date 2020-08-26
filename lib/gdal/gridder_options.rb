@@ -151,8 +151,7 @@ module GDAL
       data_types = FFI::GDAL::GDAL::DataType.symbols
 
       unless data_types.include?(type)
-        raise GDAL::InvalidDataType,
-              "output_data_type must be one of #{data_types} but was #{type}"
+        raise GDAL::InvalidDataType, "output_data_type must be one of #{data_types} but was #{type}"
       end
 
       @grid.data_type = @output_data_type = type
@@ -168,8 +167,7 @@ module GDAL
       driver_names = GDAL::Driver.short_names
 
       unless driver_names.include?(format)
-        raise GDAL::InvalidDriverName,
-              "output_form must be one of #{driver_names} but was #{format}"
+        raise GDAL::InvalidDriverName, "output_form must be one of #{driver_names} but was #{format}"
       end
 
       @output_format = format
@@ -250,8 +248,7 @@ module GDAL
     # @return [Array<Number>]
     def extract_min_max_from_array(content, min_name, max_name)
       unless content.length == 2
-        raise ArgumentError,
-              "Please supply only 2 elements, one for #{min_name}, one for #{max_name}"
+        raise ArgumentError, "Please supply only 2 elements, one for #{min_name}, one for #{max_name}"
       end
 
       [content[0], content[1]]

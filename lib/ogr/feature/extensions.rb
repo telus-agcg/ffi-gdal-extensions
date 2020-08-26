@@ -33,7 +33,7 @@ module OGR
       # @return [Number, String, Array]
       # @raise [OGR::UnsupportedFieldType] if the associated FieldDefinition's
       #   type has not yet been mapped here (to know how to return the value).
-      def field(index)
+      def field(index) # rubocop:todo Metrics/CyclomaticComplexity
         field_type = field_definition(index).type
 
         case field_type

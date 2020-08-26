@@ -37,8 +37,8 @@ RSpec.describe OGR::GeometryExtensions::WKBRecord do
       subject { described_class.read(ewkb_point_with_srid) }
 
       it 'raises a BinData::ValidityError' do
-        expect { described_class.read(ewkb_point_with_srid) }.
-          to raise_exception BinData::ValidityError
+        expect { described_class.read(ewkb_point_with_srid) }
+          .to raise_exception BinData::ValidityError
       end
     end
   end

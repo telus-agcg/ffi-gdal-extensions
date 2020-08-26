@@ -54,8 +54,8 @@ RSpec.describe OGR::Feature::Extensions do
 
     context 'block given' do
       it 'yields each geometry field definition' do
-        expect { |b| subject.each_geometry_field_definition(&b) }.
-          to yield_successive_args(OGR::GeometryFieldDefinition)
+        expect { |b| subject.each_geometry_field_definition(&b) }
+          .to yield_successive_args(OGR::GeometryFieldDefinition)
       end
     end
   end
@@ -75,8 +75,8 @@ RSpec.describe OGR::Feature::Extensions do
 
     context 'block given' do
       it 'yields each geometry field' do
-        expect { |b| subject.each_geometry_field(&b) }.
-          to yield_successive_args(geometry)
+        expect { |b| subject.each_geometry_field(&b) }
+          .to yield_successive_args(geometry)
       end
     end
   end
