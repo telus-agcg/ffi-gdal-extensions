@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'ogr/geometry_extensions/ewkb_record'
+require 'ogr/geometry/ewkb_record'
 
-RSpec.describe OGR::GeometryExtensions::EWKBRecord do
+RSpec.describe OGR::Geometry::EWKBRecord do
   let(:ewkb_point_no_srid) do
     ['0101000000000000000000f03f0000000000000040'].pack('H*')
   end
@@ -127,7 +127,7 @@ RSpec.describe OGR::GeometryExtensions::EWKBRecord do
       subject { ewkb_record.to_wkb_record }
 
       it 'turns it into a WKBRecord' do
-        expect(subject).to be_a OGR::GeometryExtensions::WKBRecord
+        expect(subject).to be_a OGR::Geometry::WKBRecord
         expect(subject.endianness).to eq ewkb_record.endianness
         expect(subject.geometry_type).to eq ewkb_record.geometry_type
         expect(subject.geometry).to eq ewkb_record.geometry

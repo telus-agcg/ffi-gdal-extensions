@@ -2,6 +2,7 @@
 
 require 'gdal/raster_band'
 require 'numo/narray'
+require_relative 'io_extensions'
 
 module GDAL
   class RasterBand
@@ -45,7 +46,7 @@ module GDAL
       # Each pixel of the raster projected using the dataset's geo_transform.
       # The output NArray is a 3D array where the inner-most array is a the
       # lat an lon, those are contained in an array per pixel line, and finally
-      # the outter array contains each of the pixel lines.
+      # the outer array contains each of the pixel lines.
       #
       # @return [NArray]
       def projected_points

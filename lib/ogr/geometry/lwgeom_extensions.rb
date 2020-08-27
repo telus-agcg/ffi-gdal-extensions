@@ -4,12 +4,12 @@ require 'ogr'
 require_relative '../../ffi/lwgeom'
 
 module OGR
-  module GeometryExtensions
+  module Geometry
     # Methods for {{OGR::Geometry}}s that use lwgeom to operate on
     # themselves.
     #
     # @see http://postgis.net/docs/doxygen/2.1/da/de7/liblwgeom_8h_af8d208cf4c0bb7c9f96c75bddc6c498a.html#af8d208cf4c0bb7c9f96c75bddc6c498a
-    module LWGeomWrappers
+    module LWGeomExtensions
       # Uses lwgeom's MakeValid to make the current geometry valid.
       #
       # @return [OGR::Geometry] Returns a new geometry, based on the
@@ -27,4 +27,4 @@ module OGR
   end
 end
 
-OGR::Geometry.include OGR::GeometryExtensions::LWGeomWrappers
+OGR::Geometry.include OGR::Geometry::LWGeomExtensions

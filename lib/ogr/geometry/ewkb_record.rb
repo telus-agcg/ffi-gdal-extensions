@@ -7,12 +7,12 @@ require_relative 'wkb_record'
 
 # rubocop:disable Naming/PredicateName
 module OGR
-  module GeometryExtensions
+  module Geometry
     # Parses raw EWKB and turns into a data structure. Only really exists for
     # converting to and from EWKB.
     #
     # @see http://trac.osgeo.org/postgis/browser/trunk/doc/ZMSgeoms.txt
-    # @see {{OGR::GeometryExtensions::EWKBRecord}}
+    # @see {{OGR::Geometry::EWKBRecord}}
     class EWKBRecord < BinData::Record
       uint8 :endianness, assert: -> { [0, 1].include?(value) }
 
@@ -39,9 +39,9 @@ module OGR
       WKB_M     = 0x4000_0000
       WKB_SRID  = 0x2000_0000
 
-      # @param wkb_record [OGR::GeometryExtensions::WKBRecord]
+      # @param wkb_record [OGR::Geometry::WKBRecord]
       # @param srid [Fixnum]
-      # @return [OGR::GeometryExtensions::EWKBRecord]
+      # @return [OGR::Geometry::EWKBRecord]
       def self.from_wkb_record(wkb_record, srid = 0)
         ewkb_type_flag = if srid.zero?
                            wkb_record.wkb_type
@@ -79,7 +79,7 @@ module OGR
         has_z? ? (type | WKB_Z) : type
       end
 
-      # @return [OGR::GeometryExtensions::WKBRecord]
+      # @return [OGR::Geometry::WKBRecord]
       def to_wkb_record
         WKBRecord.from_ewkb_record(self)
       end

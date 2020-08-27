@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'ogr/geometry_extensions/wkb_record'
+require 'ogr/geometry/wkb_record'
 
-RSpec.describe OGR::GeometryExtensions::WKBRecord do
+RSpec.describe OGR::Geometry::WKBRecord do
   let(:ewkb_point_with_srid) { ['0101000020110F0000000000000000F03F0000000000000040'].pack('H*') }
   let(:wkb_point) { ['0101000000000000000000f03f0000000000000040'].pack('H*') }
   let(:wkb_point25d) { ['01e9030000000000000000f03f00000000000000400000000000000840'].pack('H*') }

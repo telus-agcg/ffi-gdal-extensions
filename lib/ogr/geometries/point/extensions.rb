@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'ogr/point'
-
 module OGR
   class Point
     module Extensions
