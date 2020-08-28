@@ -30,7 +30,7 @@ module GDAL
     private
 
     def calculate_dimensions(dest_dataset)
-      @datasets.map.with_index do |d, _i|
+      @datasets.map.with_index do |d, _i| # rubocop:todo Metrics/BlockLength
         dest_ulx = [dest_dataset.geo_transform.x_origin, d.geo_transform.x_origin].max
         dest_lrx = [dest_dataset.lower_right_x, d.lower_right_x].min
 

@@ -14,7 +14,7 @@ require 'ogr/coordinate_transformation'
 module GDAL
   class Dataset
     # Methods not originally supplied with GDAL, but enhance it.
-    module Extensions
+    module Extensions # rubocop:todo Metrics/ModuleLength
       # Computes NDVI from the red and near-infrared bands in the dataset.
       # Raises a GDAL::RequiredBandNotFound if one of those band types isn't
       # found. Also, it closes the dataset to ensure all data and metadata have
@@ -44,7 +44,8 @@ module GDAL
         raise RequiredBandNotFound, 'Near-infrared' if nir.nil?
 
         output_data_type ||= red.data_type
-        the_array = calculate_ndvi(red.to_na, nir.to_na, no_data_value, remove_negatives, output_data_type)
+        the_array = calculate_ndvi(red.to_na, nir.to_na, no_data_value, output_data_type,
+                                   remove_negatives: remove_negatives)
         driver = GDAL::Driver.by_name(driver_name)
 
         driver.create_dataset(destination, raster_x_size, raster_y_size,
@@ -134,7 +135,7 @@ module GDAL
       # @param no_data_value [Number] Value to represent NODATA.
       # @return [NArray]
       def calculate_ndvi(red_band_array, nir_band_array, no_data_value,
-        remove_negatives = false, output_data_type = nil)
+        output_data_type = nil, remove_negatives: false)
 
         # convert to float32 for calculating
         nir_band_array = nir_band_array.to_type(NArray::DFLOAT)
@@ -185,7 +186,7 @@ module GDAL
         end
       end
 
-      # @return [GDAL::RasterBand]
+      # @return [GDAL::RasterBand, nil]
       def red_band
         band = find_band do |b|
           b.color_interpretation == :GCI_RedBand
@@ -194,7 +195,7 @@ module GDAL
         band.is_a?(GDAL::RasterBand) ? band : nil
       end
 
-      # @return [GDAL::RasterBand]
+      # @return [GDAL::RasterBand, nil]
       def green_band
         band = find_band do |b|
           b.color_interpretation == :GCI_GreenBand
@@ -203,7 +204,7 @@ module GDAL
         band.is_a?(GDAL::RasterBand) ? band : nil
       end
 
-      # @return [GDAL::RasterBand]
+      # @return [GDAL::RasterBand, nil]
       def blue_band
         band = find_band do |b|
           b.color_interpretation == :GCI_BlueBand
@@ -212,7 +213,7 @@ module GDAL
         band.is_a?(GDAL::RasterBand) ? band : nil
       end
 
-      # @return [GDAL::RasterBand]
+      # @return [GDAL::RasterBand, nil]
       def undefined_band
         band = find_band do |b|
           b.color_interpretation == :GCI_Undefined
@@ -236,6 +237,7 @@ module GDAL
       #   bands from this dataset to vectorize.  Can be a single Integer or array
       #   of Integers.
       # @return [OGR::DataSource]
+      # rubocop:todo Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def to_vector(file_name, vector_driver_name, geometry_type: :wkbUnknown,
         layer_name_prefix: 'band_number', band_numbers: [1],
         field_name_prefix: 'field', use_band_masks: true)
@@ -281,6 +283,7 @@ module GDAL
 
         data_source
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       # Gets the OGR::Geometry that represents the extent of the dataset.
       #

@@ -35,8 +35,8 @@ RSpec.describe OGR::FeatureDefinition::Extensions do
     context 'field with name exists' do
       it 'returns the OGR::GeometryFieldDefinition' do
         name = subject.geometry_field_definition(0).name
-        expect(subject.geometry_field_definition_by_name(name)).
-          to be_a OGR::GeometryFieldDefinition
+        expect(subject.geometry_field_definition_by_name(name))
+          .to be_a OGR::GeometryFieldDefinition
       end
     end
   end

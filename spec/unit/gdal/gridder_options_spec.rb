@@ -60,8 +60,8 @@ RSpec.describe GDAL::GridderOptions do
 
     context 'param is not a OGR::Geometry' do
       it 'raises a OGR::InvalidGeometry exception' do
-        expect { subject.input_clipping_geometry = 'meow' }.
-          to raise_exception OGR::InvalidGeometry
+        expect { subject.input_clipping_geometry = 'meow' }
+          .to raise_exception OGR::InvalidGeometry
       end
     end
   end
@@ -77,8 +77,8 @@ RSpec.describe GDAL::GridderOptions do
 
     context 'param is not a FFI::GDAL::GDAL::DataType' do
       it 'raises a OGR::InvalidGeometry exception' do
-        expect { subject.output_data_type = 'meow' }.
-          to raise_exception GDAL::InvalidDataType
+        expect { subject.output_data_type = 'meow' }
+          .to raise_exception GDAL::InvalidDataType
       end
     end
   end
@@ -93,16 +93,16 @@ RSpec.describe GDAL::GridderOptions do
 
     context 'param is not a GDAL::Driver short name' do
       it 'raises a GDAL::InvalidDriverName exception' do
-        expect { subject.output_format = 'meow' }.
-          to raise_exception GDAL::InvalidDriverName
+        expect { subject.output_format = 'meow' }
+          .to raise_exception GDAL::InvalidDriverName
       end
     end
   end
 
   describe '#output_x_extent=' do
     it 'returns a Hash with min and max keys' do
-      expect(subject).to receive(:extract_min_max).with(%w[some values], :min, :max).
-        and_return(%w[some values])
+      expect(subject).to receive(:extract_min_max).with(%w[some values], :min, :max)
+                                                  .and_return(%w[some values])
       subject.output_x_extent = %w[some values]
       expect(subject.output_x_extent).to eq(min: 'some', max: 'values')
     end
@@ -110,8 +110,8 @@ RSpec.describe GDAL::GridderOptions do
 
   describe '#output_y_extent=' do
     it 'returns a Hash with min and max keys' do
-      expect(subject).to receive(:extract_min_max).with(%w[some values], :min, :max).
-        and_return(%w[some values])
+      expect(subject).to receive(:extract_min_max).with(%w[some values], :min, :max)
+                                                  .and_return(%w[some values])
       subject.output_y_extent = %w[some values]
       expect(subject.output_y_extent).to eq(min: 'some', max: 'values')
     end
@@ -119,8 +119,8 @@ RSpec.describe GDAL::GridderOptions do
 
   describe '#output_size=' do
     it 'returns a Hash with min and max keys' do
-      expect(subject).to receive(:extract_min_max).with(%w[some values], :width, :height).
-        and_return(%w[some values])
+      expect(subject).to receive(:extract_min_max).with(%w[some values], :width, :height)
+                                                  .and_return(%w[some values])
       subject.output_size = %w[some values]
       expect(subject.output_size).to eq(width: 'some', height: 'values')
     end
@@ -137,8 +137,8 @@ RSpec.describe GDAL::GridderOptions do
 
     context 'param is not a OGR::SpatialReference' do
       it 'raises a OGR::InvalidSpatialReference exception' do
-        expect { subject.output_projection = 'meow' }.
-          to raise_exception OGR::InvalidSpatialReference
+        expect { subject.output_projection = 'meow' }
+          .to raise_exception OGR::InvalidSpatialReference
       end
     end
   end
@@ -146,15 +146,15 @@ RSpec.describe GDAL::GridderOptions do
   describe '#extract_min_max_from_array' do
     context 'param is a 2-element Array' do
       it 'sets the attribute' do
-        expect(subject.send(:extract_min_max_from_array, [1, 20], :foo, :bar)).
-          to eq([1, 20])
+        expect(subject.send(:extract_min_max_from_array, [1, 20], :foo, :bar))
+          .to eq([1, 20])
       end
     end
 
     context 'param is an Array with not 2 elements' do
       it 'raises an ArgumentError' do
-        expect { subject.send(:extract_min_max_from_array, [1, 20, 30], :foo, :bar) }.
-          to raise_exception ArgumentError
+        expect { subject.send(:extract_min_max_from_array, [1, 20, 30], :foo, :bar) }
+          .to raise_exception ArgumentError
       end
     end
   end
@@ -162,22 +162,22 @@ RSpec.describe GDAL::GridderOptions do
   describe '#extract_min_max_from_hash' do
     context 'param is a Hash with :min and :max keys' do
       it 'sets the attribute' do
-        expect(subject.send(:extract_min_max_from_hash, { min: 1, max: 20 }, :min, :max)).
-          to eq([1, 20])
+        expect(subject.send(:extract_min_max_from_hash, { min: 1, max: 20 }, :min, :max))
+          .to eq([1, 20])
       end
     end
 
     context 'param is a Hash with :min, :max, and :other' do
       it 'raises an ArgumentError' do
-        expect { subject.send(:extract_min_max_from_hash, { min: 1, max: 20, other: 30 }, :min, :max) }.
-          to raise_exception ArgumentError
+        expect { subject.send(:extract_min_max_from_hash, { min: 1, max: 20, other: 30 }, :min, :max) }
+          .to raise_exception ArgumentError
       end
     end
 
     context 'param is a Hash without :min and :max' do
       it 'raises an ArgumentError' do
-        expect { subject.send(:extract_min_max_from_hash, { things: 1, stuff: 20 }, :min, :max) }.
-          to raise_exception ArgumentError
+        expect { subject.send(:extract_min_max_from_hash, { things: 1, stuff: 20 }, :min, :max) }
+          .to raise_exception ArgumentError
       end
     end
   end

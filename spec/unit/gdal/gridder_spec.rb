@@ -146,10 +146,10 @@ RSpec.describe GDAL::Gridder do
       raster_height = 5
       block_y_size = 3
 
-      expect(subject).to receive(:build_block_size).with(raster_width, block_x_size).
-        and_call_original
-      expect(subject).to receive(:build_block_size).with(raster_height, block_y_size).
-        and_call_original
+      expect(subject).to receive(:build_block_size).with(raster_width, block_x_size)
+                                                   .and_call_original
+      expect(subject).to receive(:build_block_size).with(raster_height, block_y_size)
+                                                   .and_call_original
 
       subject.send(:build_block_count, block_x_size, block_y_size, raster_width, raster_height)
     end

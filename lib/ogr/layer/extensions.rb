@@ -5,7 +5,7 @@ require 'ogr/layer'
 module OGR
   class Layer
     # Methods not part of the C Layer API.
-    module Extensions
+    module Extensions # rubocop:todo Metrics/ModuleLength
       # Enumerates through all associated features. Beware: it calls
       # {#reset_reading} both before and after it's called. If you're using
       # {OGR::Layer#next_feature} for iterating through features somewhere in
@@ -111,7 +111,8 @@ module OGR
       # @raise [OGR::UnsupportedGeometryType] if a geometry of some type is
       #   encountered that the method doesn't know how to extract point values
       #   from.
-      def point_values(with_attributes = {})
+      # rubocop:todo Metrics/PerceivedComplexity
+      def point_values(with_attributes = {}) # rubocop:todo Metrics/CyclomaticComplexity
         return [[]] if feature_count.zero?
 
         field_indices = with_attributes.keys.map { |field_name| find_field_index(field_name) }
@@ -128,7 +129,7 @@ module OGR
         # I've tried refactoring chunks of this out to separate methods and
         # performance suffers greatly. Since this is a key part of gridding (at
         # least at this point), it needs to be as fast as possible.
-        each_feature_pointer do |feature_ptr|
+        each_feature_pointer do |feature_ptr| # rubocop:todo Metrics/BlockLength
           field_values = field_indices.map.with_index do |j, attribute_index|
             FFI::OGR::API.send("OGR_F_GetFieldAs#{with_attributes.values[attribute_index].capitalize}", feature_ptr, j)
           end
@@ -217,6 +218,7 @@ module OGR
 
         values
       end
+      # rubocop:enable Metrics/PerceivedComplexity
 
       # Iterates through features to see if any of them are 3d.
       #

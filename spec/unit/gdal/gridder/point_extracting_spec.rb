@@ -21,15 +21,15 @@ RSpec.describe GDAL::Gridder do
       before { allow(gridder_options).to receive(:input_field_name).and_return 'things' }
 
       it 'gets points with attributes by the input_field_name' do
-        expect(subject).to receive(:points_with_field_attributes).
-          with(source_layer, 'things', clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
+        expect(subject).to receive(:points_with_field_attributes)
+          .with(source_layer, 'things', clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
 
         subject.points
       end
 
       it 'returns an NArray' do
-        allow(subject).to receive(:points_with_field_attributes).
-          with(source_layer, 'things', clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
+        allow(subject).to receive(:points_with_field_attributes)
+          .with(source_layer, 'things', clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
 
         expect(subject.points).to eq([[0, 0, 0], [1, 1, 1]])
       end
@@ -39,15 +39,15 @@ RSpec.describe GDAL::Gridder do
       before { allow(gridder_options).to receive(:input_field_name).and_return nil }
 
       it 'gets points with attributes without the input_field_name' do
-        expect(subject).to receive(:points_no_field_attributes).
-          with(source_layer, clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
+        expect(subject).to receive(:points_no_field_attributes)
+          .with(source_layer, clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
 
         subject.points
       end
 
       it 'returns an NArray' do
-        allow(subject).to receive(:points_no_field_attributes).
-          with(source_layer, clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
+        allow(subject).to receive(:points_no_field_attributes)
+          .with(source_layer, clipping_geometry).and_return [[0, 0, 0], [1, 1, 1]]
 
         expect(subject.points).to eq([[0, 0, 0], [1, 1, 1]])
       end

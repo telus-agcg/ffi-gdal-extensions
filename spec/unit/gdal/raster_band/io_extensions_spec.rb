@@ -120,8 +120,8 @@ RSpec.describe 'GDAL::RasterBand::IOExtensions' do
   describe '#read_lines_by_block' do
     context 'block is given' do
       it 'yields each row of pixels' do
-        expect { |b| subject.read_lines_by_block(&b) }.
-          to yield_successive_args(*Array.new(25, Array.new(15, 0)))
+        expect { |b| subject.read_lines_by_block(&b) }
+          .to yield_successive_args(*Array.new(25, Array.new(15, 0)))
       end
     end
 

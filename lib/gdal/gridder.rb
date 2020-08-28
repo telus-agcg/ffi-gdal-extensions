@@ -9,7 +9,7 @@ require_relative 'gridder/point_extracting'
 
 module GDAL
   # Somewhat analogous to the gdal_grid utility.
-  class Gridder
+  class Gridder # rubocop:todo Metrics/ClassLength
     include PointExtracting
     include GDAL::Logger
 
@@ -213,7 +213,8 @@ module GDAL
     # @param raster_band_block_size [Hash{x: Integer, y: Integer}]
     # @param data_type_size [Integer]
     # @return [Hash{x: Integer, y: Integer}]
-    def build_block_sizes(raster_band_block_size, data_type_size)
+    # rubocop:todo Metrics/PerceivedComplexity
+    def build_block_sizes(raster_band_block_size, data_type_size) # rubocop:todo Metrics/CyclomaticComplexity
       block_x_size = raster_band_block_size[:x]
       block_y_size = raster_band_block_size[:y]
 
@@ -233,6 +234,7 @@ module GDAL
 
       { x: block_x_size.freeze, y: block_y_size.freeze }
     end
+    # rubocop:enable Metrics/PerceivedComplexity
 
     # Builds a pointer to a GDALScaledProgress function. This is used in
     # conjunction with the @options.progress_function to be able to display

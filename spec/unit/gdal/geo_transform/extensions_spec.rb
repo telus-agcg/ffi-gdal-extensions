@@ -57,8 +57,8 @@ RSpec.describe GDAL::GeoTransform::Extensions do
 
     context 'zero pixel width and height' do
       it 'returns a pixel: and line: Hash with according values' do
-        expect { subject.world_to_pixel(0, 0) }.
-          to raise_exception GDAL::InvalidGeoTransform
+        expect { subject.world_to_pixel(0, 0) }
+          .to raise_exception GDAL::InvalidGeoTransform
       end
     end
   end
