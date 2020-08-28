@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ogr/geometry_extensions/ewkb_io'
+require 'ogr/geometry/ewkb_io_extensions'
 
 RSpec.describe OGR::Geometry do
   let(:ewkb_point_no_srid) do

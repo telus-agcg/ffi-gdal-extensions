@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'gdal/driver'
+require 'gdal/driver'
 
 module GDAL
   # NOT YET WORKING!

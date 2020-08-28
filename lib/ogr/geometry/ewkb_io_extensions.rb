@@ -6,11 +6,11 @@ require_relative 'ewkb_record'
 require_relative 'wkb_record'
 
 module OGR
-  module GeometryExtensions
+  module Geometry
     # Extends OGR::Geometry with methods that allow creating a Geometry from
     # EKWB or outputting a Geometry as EWKB (EWKB is the WKB format that PostGIS
     # uses).
-    module EWKBIO
+    module EWKBIOExtensions
       # Methods to extend OGR::Geometry with.
       module ClassMethods
         # @param ewkb_data [String] Binary EWKB string.
@@ -42,4 +42,4 @@ module OGR
   end
 end
 
-OGR::Geometry.include OGR::GeometryExtensions::EWKBIO
+OGR::Geometry.include OGR::Geometry::EWKBIOExtensions

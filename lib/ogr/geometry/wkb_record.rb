@@ -5,11 +5,11 @@ require 'ffi-gdal'
 require 'ogr'
 
 module OGR
-  module GeometryExtensions
+  module Geometry
     # Parses raw WKB and turns into a data structure. Only really exists for
     # converting to and from EWKB.
     #
-    # @see {{OGR::GeometryExtensions::EWKBRecord}}
+    # @see {{OGR::Geometry::EWKBRecord}}
     class WKBRecord < BinData::Record
       uint8 :endianness, assert: -> { [0, 1].include?(value) }
 
@@ -28,8 +28,8 @@ module OGR
 
       WKB_Z = 0x8000_0000
 
-      # @param ewkb_record [OGR::GeometryExtensions::EWKBRecord]
-      # @return [OGR::GeometryExtensions::WKBRecord]
+      # @param ewkb_record [OGR::Geometry::EWKBRecord]
+      # @return [OGR::Geometry::WKBRecord]
       def self.from_ewkb_record(ewkb_record)
         new(endianness: ewkb_record.endianness,
             wkb_type: ewkb_record.geometry_type,
@@ -37,7 +37,7 @@ module OGR
       end
 
       # @param ewkb_data [String] Binary string with the EWKB data.
-      # @return [OGR::GeometryExtensions::WKBRecord]
+      # @return [OGR::Geometry::WKBRecord]
       def self.from_ewkb(ewkb_data)
         from_ewkb_record(EWKBRecord.read(ewkb_data))
       end

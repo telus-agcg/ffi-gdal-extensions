@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'ogr/geometry_extensions/lwgeom_wrappers'
+require 'ogr/geometry/lwgeom_extensions'
 
-RSpec.describe OGR::GeometryExtensions::LWGeomWrappers do
+RSpec.describe OGR::Geometry::LWGeomExtensions do
   subject { OGR::Geometry.create_from_wkt(wkt) }
 
   shared_context 'shared point, no crossing' do
