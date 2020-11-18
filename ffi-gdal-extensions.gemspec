@@ -8,12 +8,12 @@ Gem::Specification.new do |spec|
   spec.name          = 'ffi-gdal-extensions'
   spec.version       = FFI::GDAL::Extensions::VERSION
   spec.authors       = ['Steve Loveless']
-  spec.email         = ['steve.loveless@gmail.com']
+  spec.email         = ['steve.loveless@agrian.com']
 
   spec.summary       = 'Additional functionality to the ffi-gdal gem'
   spec.description   = %(Make ffi-gdal feel more like Ruby, plus adds some new
   functionality)
-  spec.homepage = 'https://bitbucket.org/agrian/ffi-gdal-extensions'
+  spec.homepage = 'https://github.com/agrian-inc/ffi-gdal-extensions'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -33,6 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'rubocop-checkstyle_formatter'
+  spec.add_development_dependency 'rubocop-performance'
   spec.add_development_dependency 'simplecov', '~> 0.9'
 end

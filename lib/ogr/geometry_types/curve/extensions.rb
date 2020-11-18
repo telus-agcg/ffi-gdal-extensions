@@ -24,7 +24,7 @@ module OGR
         # @return [Enumerator]
         # @yieldparam [OGR::Point]
         def each_point_geometry
-          return enum_for(:each_point_as_geometry) unless block_given?
+          return enum_for(:each_point_geometry) unless block_given?
 
           point_count.times do |point_num|
             yield point_as_geometry(point_num)

@@ -23,7 +23,7 @@ module OGR
       end
 
       # Make sure the geometry_type is one OGR knows about.
-      virtual assert: -> { FFI::OGR::Core::WKBGeometryType.symbol_map.values.include? geometry_type }
+      virtual assert: -> { FFI::OGR::Core::WKBGeometryType.symbol_map.value?(geometry_type) }
 
       # If the wkb_type has the SRID flag set, there's an SRID.
       choice :srid, onlyif: :has_srid?, selection: :endianness do

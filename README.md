@@ -1,6 +1,6 @@
 # FFI::GDAL::Extensions
 
-[ffi-gdal](https://bitbucket.org/agrian/ffi-gdal) is a wrapper around the GDAL
+[ffi-gdal](https://github.com/agrian-inc/ffi-gdal) is a wrapper around the GDAL
 (and OGR) library, but since that is written in C/C++, much of its API feels
 like those languages. Methods found in this gem extend that gem by a) making
 it feel more Rubyesque, and b) adding some new functionality.
@@ -39,8 +39,8 @@ git commits and tags, and push the `.gem` file to
 
 ## Contributing
 
-Bug reports and pull requests are welcome on BitBucket at
-https://bitbucket.org/agrian/ffi-gdal-extensions. This project is intended to be
+Bug reports and pull requests are welcome on GitHub at
+https://github.com/agrian-inc/ffi-gdal-extensions. This project is intended to be
 a safe, welcoming space for collaboration, and contributors are expected to
 adhere to the [Contributor Covenant](http://contributor-covenant.org) code of
 conduct.
