@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Additional functionality to the ffi-gdal gem'
   spec.description   = %(Make ffi-gdal feel more like Ruby, plus adds some new
   functionality)
-  spec.homepage = 'https://bitbucket.org/agrian/ffi-gdal-extensions'
+  spec.homepage = 'https://github.com/agrian-inc/ffi-gdal-extensions'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
