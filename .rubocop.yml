@@ -1,11 +1,10 @@
 ---
 inherit_from: .rubocop_todo.yml
+require:
+  - rubocop-performance
 
 Layout/LineLength:
   Max: 120
-
-Layout/ParameterAlignment:
-  EnforcedStyle: with_fixed_indentation
 
 Metrics/BlockLength:
   Exclude:
@@ -35,7 +34,5 @@ Style/SymbolArray:
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  Exclude:
-    - vendor/bundle/**/*
   NewCops: enable
   TargetRubyVersion: 2.6

@@ -20,7 +20,7 @@ module OGR
       end
 
       # Make sure the geometry_type is one OGR knows about.
-      virtual assert: -> { FFI::OGR::Core::WKBGeometryType.symbol_map.values.include? geometry_type }
+      virtual assert: -> { FFI::OGR::Core::WKBGeometryType.symbol_map.value?(geometry_type) }
 
       # The #geometry attribute is just the rest of the data. We don't care what
       # kind of geom it actually is; that doesn't matter for building EWKB.

@@ -37,7 +37,7 @@ module GDAL
       # @param options [Hash] Options that get used for creating the new NDVI
       #   dataset. See docs for GDAL::Driver#create_dataset.
       def extract_ndvi(destination, red_band_number, nir_band_number, driver_name: 'GTiff',
-        output_data_type: nil, remove_negatives: false, no_data_value: -9999.0, **options)
+                       output_data_type: nil, remove_negatives: false, no_data_value: -9999.0, **options)
         red = raster_band(red_band_number)
         nir = raster_band(nir_band_number)
         raise RequiredBandNotFound, 'Red band not found.' if red.nil?
@@ -104,7 +104,7 @@ module GDAL
       # @param options [Hash] Options that get used for creating the new NDVI
       #   dataset. See docs for GDAL::Driver#create_dataset.
       def extract_natural_color(destination, red_band_number, green_band_number, blue_band_number,
-        driver_name: 'GTiff', output_data_type: nil, **options)
+                                driver_name: 'GTiff', output_data_type: nil, **options)
         original_bands = {
           red: raster_band(red_band_number),
           green: raster_band(green_band_number),
@@ -135,7 +135,7 @@ module GDAL
       # @param no_data_value [Number] Value to represent NODATA.
       # @return [NArray]
       def calculate_ndvi(red_band_array, nir_band_array, no_data_value,
-        output_data_type = nil, remove_negatives: false)
+                         output_data_type = nil, remove_negatives: false)
 
         # convert to float32 for calculating
         nir_band_array = nir_band_array.to_type(NArray::DFLOAT)
@@ -239,8 +239,8 @@ module GDAL
       # @return [OGR::DataSource]
       # rubocop:todo Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def to_vector(file_name, vector_driver_name, geometry_type: :wkbUnknown,
-        layer_name_prefix: 'band_number', band_numbers: [1],
-        field_name_prefix: 'field', use_band_masks: true)
+                    layer_name_prefix: 'band_number', band_numbers: [1],
+                    field_name_prefix: 'field', use_band_masks: true)
         band_numbers = band_numbers.is_a?(Array) ? band_numbers : [band_numbers]
         ogr_driver = OGR::Driver.by_name(vector_driver_name)
 
