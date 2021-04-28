@@ -19,7 +19,7 @@ module OGR
           e = EWKBRecord.read(ewkb_data)
 
           if e.srid?
-            spatial_ref = OGR::SpatialReference.new_from_epsg(e.srid)
+            spatial_ref = OGR::SpatialReference.new.import_from_epsg(e.srid)
             create_from_wkb(e.to_wkb, spatial_ref)
           else
             create_from_wkb(e.to_wkb)

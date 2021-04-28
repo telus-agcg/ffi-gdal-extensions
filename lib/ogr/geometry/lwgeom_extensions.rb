@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ogr'
+require 'ogr/geometry'
 require_relative '../../ffi/lwgeom'
 
 module OGR
@@ -27,4 +27,4 @@ module OGR
   end
 end
 
-OGR::Geometry.include OGR::Geometry::LWGeomExtensions
+OGR::Geometry.include(OGR::Geometry::LWGeomExtensions)

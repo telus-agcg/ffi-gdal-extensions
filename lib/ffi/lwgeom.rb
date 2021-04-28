@@ -22,7 +22,7 @@ module FFI
     end
 
     LIB_PATH = find_lib('liblwgeom').freeze
-    ffi_lib [::FFI::CURRENT_PROCESS, LIB_PATH] if LIB_PATH
+    ffi_lib(::FFI::CURRENT_PROCESS, LIB_PATH) if LIB_PATH
 
     VARIANT_WKB_ISO       = 0x01
     VARIANT_WKB_SFSQL     = 0x02

@@ -7,7 +7,7 @@ RSpec.describe 'GDAL::Gridder', type: :integration do
   let(:shapefile_path) { File.expand_path('../../../spec/support/shapefiles/states_21basic', __dir__) }
   let(:source_data_source) { OGR::DataSource.open(shapefile_path, 'r') }
   let(:source_layer) { source_data_source.layer(0) }
-  let(:dataset) { GDAL::Dataset.open(output_file_name, 'w', true) }
+  let(:dataset) { GDAL::Dataset.open(output_file_name, 'w', shared: true) }
 
   after do
     source_data_source.close if source_data_source.c_pointer

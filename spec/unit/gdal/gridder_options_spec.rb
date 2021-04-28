@@ -129,7 +129,7 @@ RSpec.describe GDAL::GridderOptions do
   describe '#output_projection=' do
     context 'param is a OGR::SpatialReference' do
       it 'sets the attribute' do
-        projection = OGR::SpatialReference.new_from_epsg(4326)
+        projection = OGR::SpatialReference.new.import_from_epsg(4326)
         subject.output_projection = projection
         expect(subject.output_projection).to eq projection
       end

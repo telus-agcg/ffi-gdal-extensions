@@ -2,7 +2,7 @@
 
 require 'ogr/geometry/lwgeom_extensions'
 
-RSpec.describe OGR::Geometry::LWGeomExtensions do
+RSpec.describe OGR::Geometry do
   subject { OGR::Geometry.create_from_wkt(wkt) }
 
   shared_context 'shared point, no crossing' do
