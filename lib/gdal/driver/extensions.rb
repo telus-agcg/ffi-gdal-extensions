@@ -32,7 +32,7 @@ module GDAL
             obj[driver.short_name] = driver.long_name
           end
 
-          Hash[names.sort]
+          names.sort.to_h
         end
       end
 
