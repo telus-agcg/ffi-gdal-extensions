@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'gdal/raster_band'
+
 module GDAL
   class RasterBand
     # Methods for reading & writing RasterBands that didn't come from GDAL.

@@ -2,7 +2,9 @@
 
 require 'gdal/grid'
 require 'gdal/options'
-require 'ogr'
+require 'ogr/exceptions'
+require 'ogr/geometry'
+require 'ogr/spatial_reference'
 
 module GDAL
   # Object to be used with a {GDAL::Gridder}.

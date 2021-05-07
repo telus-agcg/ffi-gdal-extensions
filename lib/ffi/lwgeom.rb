@@ -12,7 +12,7 @@ module FFI
     def self.find_lib(lib)
       lib_file_name = "#{lib}.#{FFI::Platform::LIBSUFFIX}*"
 
-      return Dir.glob(File.join(ENV['LWGEOM_LIBRARY_PATH'], lib_file_name)) if ENV['LWGEOM_LIBRARY_PATH']
+      return Dir.glob(File.join(ENV['LWGEOM_LIBRARY_PATH'], lib_file_name)).first if ENV['LWGEOM_LIBRARY_PATH']
 
       FFI::GDAL.search_paths.flat_map do |search_path|
         Dir.glob(search_path).flat_map do |path|
@@ -22,7 +22,7 @@ module FFI
     end
 
     LIB_PATH = find_lib('liblwgeom').freeze
-    ffi_lib [::FFI::CURRENT_PROCESS, LIB_PATH] if LIB_PATH
+    ffi_lib(::FFI::CURRENT_PROCESS, LIB_PATH) if LIB_PATH
 
     VARIANT_WKB_ISO       = 0x01
     VARIANT_WKB_SFSQL     = 0x02

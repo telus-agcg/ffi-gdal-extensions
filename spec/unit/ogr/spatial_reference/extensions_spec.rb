@@ -6,7 +6,7 @@ RSpec.describe OGR::SpatialReference::Extensions do
   # Not sure why yet, but it seems I can only do angular unit setting with
   # certain projections; 4326 is one of them.
   describe '#angular_units= + #angular_units' do
-    subject { OGR::SpatialReference.new_from_epsg(4326) }
+    subject { OGR::SpatialReference.new.import_from_epsg(4326) }
 
     context 'using a known label' do
       it 'sets the new label and value' do
@@ -25,7 +25,7 @@ RSpec.describe OGR::SpatialReference::Extensions do
   # Not sure why yet, but it seems I can only do linear unit setting with
   # certain projections; 4333 is one of them.
   describe '#linear_units= + #linear_units' do
-    subject { OGR::SpatialReference.new_from_epsg(4333) }
+    subject { OGR::SpatialReference.new.import_from_epsg(4333) }
 
     context 'using a known label' do
       it 'sets the new label and value' do
