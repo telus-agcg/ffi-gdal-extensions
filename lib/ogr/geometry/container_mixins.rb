@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'ogr'
 require 'ogr/geometries/geometry_collection'
 require 'ogr/geometries/multi_line_string'
 require 'ogr/geometries/multi_point'

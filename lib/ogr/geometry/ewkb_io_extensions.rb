@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'ffi-gdal'
-require 'ogr'
+require 'ogr/spatial_reference'
 require_relative 'ewkb_record'
 require_relative 'wkb_record'
 

@@ -27,4 +27,18 @@ module OGR
   end
 end
 
-OGR::Geometry.include(OGR::Geometry::LWGeomExtensions)
+OGR::GeometryCollection.include(OGR::Geometry::LWGeomExtensions)
+OGR::GeometryCollection25D.include(OGR::Geometry::LWGeomExtensions)
+OGR::LineString.include(OGR::Geometry::LWGeomExtensions)
+OGR::LineString25D.include(OGR::Geometry::LWGeomExtensions)
+OGR::LinearRing.include(OGR::Geometry::LWGeomExtensions)
+OGR::MultiLineString.include(OGR::Geometry::LWGeomExtensions)
+OGR::MultiLineString25D.include(OGR::Geometry::LWGeomExtensions)
+OGR::MultiPoint.include(OGR::Geometry::LWGeomExtensions)
+OGR::MultiPoint25D.include(OGR::Geometry::LWGeomExtensions)
+OGR::MultiPolygon.include(OGR::Geometry::LWGeomExtensions)
+OGR::MultiPolygon25D.include(OGR::Geometry::LWGeomExtensions)
+OGR::Point.include(OGR::Geometry::LWGeomExtensions)
+OGR::Point25D.include(OGR::Geometry::LWGeomExtensions)
+OGR::Polygon.include(OGR::Geometry::LWGeomExtensions)
+OGR::Polygon25D.include(OGR::Geometry::LWGeomExtensions)
