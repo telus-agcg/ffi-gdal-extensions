@@ -29,11 +29,6 @@ module FFI
           Dir.glob(File.join(path, lib_file_name))
         end
       end.flatten.uniq.first
-      # FFI::GDAL.search_paths.flat_map do |search_path|
-      #   Dir.glob(search_path).flat_map do |path|
-      #     Dir.glob(File.join(path, lib_file_name))
-      #   end
-      # end.uniq.first
     end
 
     # @return [Array<String>] List of paths to search for libs in.
@@ -54,6 +49,9 @@ module FFI
     LIB_PATH = find_lib('liblwgeom*').freeze
     ffi_lib [::FFI::CURRENT_PROCESS, LIB_PATH] if LIB_PATH
 
+    # In PostGIS <=2.5.5, this is a u8; in >=3.x, this is a u16.
+    typedef :uint8, :lwflags_t
+
     VARIANT_WKB_ISO       = 0x01
     VARIANT_WKB_SFSQL     = 0x02
     VARIANT_WKB_EXTENDED  = 0x04
@@ -65,8 +63,21 @@ module FFI
     VARIANT_WKT_SFSQL     = 0x02
     VARIANT_WKT_EXTENDED  = 0x04
 
-    attach_function :lwgeom_from_wkt, %i[string bool], Geom.ptr
-    attach_function :lwgeom_from_wkb, %i[pointer size_t bool], Geom.ptr
+    LW_PARSER_CHECK_NONE = 0
+    LW_PARSER_CHECK_MINPOINTS = 1
+    LW_PARSER_CHECK_ODD = 2
+    LW_PARSER_CHECK_CLOSURE = 4
+    LW_PARSER_CHECK_ZCLOSURE = 8
+
+    # The `:char` param is a bitmask based on the `LW_PARSER_CHECK_` flags.
+    attach_function :lwgeom_from_wkt, %i[string char], Geom.ptr
+
+    # The `:char` param is a bitmask based on the `LW_PARSER_CHECK_` flags.
+    attach_function :lwgeom_from_wkb, %i[pointer size_t char], Geom.ptr
+
+    # The `:uint8` param is the geometry variant flag, given by `VARIANT_WKT_*`.
+    # The `:int` param is the precision.
+    # The `:pointer` is an out param that will contain the size of the buffer.
     attach_function :lwgeom_to_wkt, [Geom.ptr, :uint8, :int, :pointer], :string
     attach_function :lwgeom_to_wkb, [Geom.ptr, :uint8, :pointer], :pointer
 
