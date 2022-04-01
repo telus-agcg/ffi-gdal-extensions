@@ -37,6 +37,33 @@ release a new version, update the version number in `version.rb`, and then run
 git commits and tags, and push the `.gem` file to
 [rubygems.org](https://rubygems.org).
 
+### Development Using Docker
+
+The `docker-compose.yml` file provides two configurations for running tests
+against:
+
+- `Dockerfile.gdal3`
+  - GDAL 3.4.2
+  - `liblwgeom` 2.5.5
+  - Ruby 3.1.1
+- `Dockerfile.gdal2`
+  - GDAL 2.4.4
+  - `liblwgeom` 2.5.5
+  - Ruby 3.1.1
+
+Running tests looks something like:
+
+...for GDAL3:
+
+```
+docker-compose run gdal3 bundle exec rake spec
+```
+
+...for GDAL2:
+
+```
+docker-compose run gdal2 bundle exec rake spec
+```
 ## Contributing
 
 Bug reports and pull requests are welcome on BitBucket at

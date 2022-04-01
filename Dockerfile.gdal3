@@ -1,0 +1,78 @@
+# syntax=docker/dockerfile:1
+FROM osgeo/gdal:ubuntu-small-3.4.2 as base
+
+#------------------------------------------------------------------------------
+# liblwgeom
+#------------------------------------------------------------------------------
+FROM base as lwgeom_builder
+
+COPY --from=liblwgeom:2.5.5-buster /usr/local/lib/liblwgeom-2.5.so.0.0.0 /usr/local/lib/
+
+#------------------------------------------------------------------------------
+# Dev setup 1
+#------------------------------------------------------------------------------
+FROM lwgeom_builder as ruby_builder
+
+RUN apt-get update -yqq \
+	&& apt-get install -yqq --no-install-recommends \
+  build-essential \
+  libgeos-dev \
+  libproj-dev \
+  libyaml-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV GEM_HOME /usr/local/bundle
+ENV BUNDLE_SILENCE_ROOT_WARNING=1 \
+	BUNDLE_APP_CONFIG="$GEM_HOME"
+ENV PATH $GEM_HOME/bin:$PATH
+RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
+
+COPY --from=ruby:3.1 --chown=root /usr/local/bin/* /usr/local/bin/
+
+COPY --from=ruby:3.1 --chown=root /usr/local/lib/libruby.so.3.1.1 /usr/local/lib/
+RUN ln -s /usr/local/lib/libruby.so.3.1.1 /usr/local/lib/libruby.so
+
+COPY --from=ruby:3.1 --chown=root /usr/local/lib/pkgconfig/ruby-3.1.pc /usr/local/lib/pkgconfig/
+COPY --from=ruby:3.1 --chown=root /usr/local/lib/ruby/3.1.0 /usr/local/lib/ruby/3.1.0
+COPY --from=ruby:3.1 --chown=root /usr/local/lib/ruby/gems /usr/local/lib/ruby/gems
+COPY --from=ruby:3.1 --chown=root /usr/local/lib/ruby/site_ruby /usr/local/lib/ruby/site_ruby
+COPY --from=ruby:3.1 --chown=root /usr/local/lib/ruby/vendor_ruby /usr/local/lib/ruby/vendor_ruby
+
+COPY --from=ruby:3.1 --chown=root /usr/local/include/ruby-3.1.0 /usr/local/include/ruby-3.1.0
+
+COPY --from=ruby:3.1 --chown=root /usr/local/etc/gemrc /usr/local/etc/gemrc
+
+# Link the libraries after copying them over from the ruby image.
+RUN ldconfig
+
+RUN gem update --system \
+  && gem install bundler
+
+#------------------------------------------------------------------------------
+# Dev setup 1
+#------------------------------------------------------------------------------
+FROM ruby_builder as dev_builder1
+
+RUN apt-get update -yqq \
+	&& apt-get install -yqq --no-install-recommends \
+  git \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY ./ffi-gdal-extensions.gemspec /usr/src/ffi-gdal-extensions/
+COPY ./lib/ffi/gdal/extensions/version.rb /usr/src/ffi-gdal-extensions/lib/ffi/gdal/extensions/
+COPY ./Gemfile* /usr/src/ffi-gdal-extensions/
+
+WORKDIR /usr/src/ffi-gdal-extensions/
+
+# Use a docker volume for storing gems
+ENV BUNDLE_PATH /gems
+RUN bundle install
+
+#------------
+# Copy over the rest of the lib
+COPY . /usr/src/ffi-gdal-extensions/
+
+CMD ["bundle", "exec", "rake", "spec"]
+# vim:ft=dockerfile

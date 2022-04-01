@@ -1,0 +1,7 @@
+# Git
+.git
+.gitignore
+
+# Editor temp files
+*.swp
+*.swo
