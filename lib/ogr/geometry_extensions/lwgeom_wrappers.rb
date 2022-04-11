@@ -13,7 +13,7 @@ module OGR
       # @return [OGR::Geometry] Returns a new geometry, based on the
       #   lwgeom_make_valid call.
       def make_valid
-        geom = FFI::LWGeom.lwgeom_from_wkb(to_wkb, wkb_size, false)
+        geom = FFI::LWGeom.lwgeom_from_wkb(to_wkb, wkb_size, FFI::LWGeom::LW_PARSER_CHECK_NONE)
         valid_geom = FFI::LWGeom.lwgeom_make_valid(geom)
         valid_wkb_size = FFI::MemoryPointer.new(:size_t)
         valid_wkb_ptr = FFI::LWGeom.lwgeom_to_wkb(valid_geom, FFI::LWGeom::VARIANT_WKB_EXTENDED, valid_wkb_size)

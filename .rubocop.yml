@@ -1,3 +1,7 @@
+---
+require:
+  - rubocop-performance
+
 Metrics/ClassLength:
   Max: 300
 
@@ -7,26 +11,14 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Max: 20
 
-Style/AlignParameters:
-  EnforcedStyle: with_fixed_indentation
-
 Style/Documentation:
   Enabled: false
-
-Style/DotPosition:
-  EnforcedStyle: trailing
 
 Style/DoubleNegation:
   Enabled: false
 
 Style/FormatString:
   EnforcedStyle: percent
-
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%i': '[]'
-    '%w': '[]'
-    '%W': '[]'
 
 Style/PredicateName:
   Exclude:
@@ -42,8 +34,9 @@ Style/SymbolArray:
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
+  NewCops: enable
   Include:
     - Gemfile
   Exclude:
     - vendor/bundle/**/*
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.6

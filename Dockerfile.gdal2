@@ -1,0 +1,117 @@
+# syntax=docker/dockerfile:1
+FROM ruby:3.1 as base
+
+#------------------------------------------------------------------------------
+# GDAL setup
+# We don't need much for ffi-gdal-extensions...
+# https://trac.osgeo.org/gdal/wiki/BuildingOnUnixWithMinimizedDrivers
+#------------------------------------------------------------------------------
+FROM base as gdal_builder
+
+ARG GDAL_VERSION="2.4.4"
+ARG GDAL_TARBALL="gdal-${GDAL_VERSION}.tar.gz"
+
+WORKDIR /tmp
+
+RUN apt-get update -yqq \
+	&& apt-get upgrade -yqq \
+	&& apt-get install -yqq --no-install-recommends \
+	build-essential \
+	ca-certificates \
+	curl \
+  libgeos-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && curl -sSf -L -O "https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/${GDAL_TARBALL}" \
+  && curl -sSf -L -O "https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/${GDAL_TARBALL}.md5" \
+  && md5sum --strict --check "${GDAL_TARBALL}.md5" \
+  && mkdir gdal \
+  && tar -zxvf $GDAL_TARBALL -C /tmp/gdal --strip-components=1 \
+  && rm ${GDAL_TARBALL} "${GDAL_TARBALL}.md5" \
+  && cd /tmp/gdal \
+  && ./configure \
+      --with-geos \
+      --with-geotiff=internal \
+      --with-libtiff=internal \
+      --with-libz=internal \
+      --with-threads \
+      --without-bsb \
+      --without-cfitsio \
+      --without-cryptopp \
+      --without-curl \
+      --without-ecw \
+      --without-expat \
+      --without-fme \
+      --without-freexl \
+      --without-gif \
+      --without-gif \
+      --without-gnm \
+      --without-grass \
+      --without-grib \
+      --without-hdf4 \
+      --without-hdf5 \
+      --without-idb \
+      --without-ingres \
+      --without-jasper \
+      --without-jp2mrsid \
+      --without-jpeg \
+      --without-kakadu \
+      --without-libgrass \
+      --without-libkml \
+      --without-libtool \
+      --without-mrf \
+      --without-mrsid \
+      --without-mysql \
+      --without-netcdf \
+      --without-odbc \
+      --without-ogdi \
+      --without-openjpeg \
+      --without-pcidsk \
+      --without-pcraster \
+      --without-pcre \
+      --without-perl \
+      --without-pg \
+      --without-png \
+      --without-python \
+      --without-qhull \
+      --without-sde \
+      --without-sqlite3 \
+      --without-webp \
+      --without-xerces \
+      --without-xml2 \
+      && make \
+      && make install \
+      && cd /tmp \
+      && rm -rf gdal
+
+#------------------------------------------------------------------------------
+# liblwgeom
+#------------------------------------------------------------------------------
+FROM gdal_builder as lwgeom_builder
+
+COPY --from=liblwgeom:2.5.5-buster /usr/local/lib/liblwgeom-2.5.so.0.0.0 /usr/local/lib/
+
+#------------------------------------------------------------------------------
+# Dev setup 1
+#------------------------------------------------------------------------------
+FROM lwgeom_builder as dev_builder1
+
+RUN gem update --system \
+  && gem install bundler
+
+COPY ./ffi-gdal-extensions.gemspec /usr/src/ffi-gdal-extensions/
+COPY ./lib/ffi/gdal/extensions/version.rb /usr/src/ffi-gdal-extensions/lib/ffi/gdal/extensions/
+COPY ./Gemfile* /usr/src/ffi-gdal-extensions/
+
+WORKDIR /usr/src/ffi-gdal-extensions/
+
+# Use a docker volume for storing gems
+ENV BUNDLE_PATH /gems
+RUN bundle install
+
+#------------
+# Copy over the rest of the lib
+COPY . /usr/src/ffi-gdal-extensions/
+
+CMD ["bundle", "exec", "rake", "spec"]
+# vim:ft=dockerfile
