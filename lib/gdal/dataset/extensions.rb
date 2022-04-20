@@ -241,7 +241,7 @@ module GDAL
       def to_vector(file_name, vector_driver_name, geometry_type: :wkbUnknown,
                     layer_name_prefix: 'band_number', band_numbers: [1],
                     field_name_prefix: 'field', use_band_masks: true)
-        band_numbers = band_numbers.is_a?(Array) ? band_numbers : [band_numbers]
+        band_numbers = [band_numbers] unless band_numbers.is_a?(Array)
         ogr_driver = OGR::Driver.by_name(vector_driver_name)
 
         if projection.empty?

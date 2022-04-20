@@ -122,11 +122,11 @@ module GDAL
     end
 
     def x_size(geo_transform, lower_right_x)
-      ((lower_right_x - geo_transform.x_origin) / geo_transform.pixel_width + 0.5).to_i
+      (((lower_right_x - geo_transform.x_origin) / geo_transform.pixel_width) + 0.5).to_i
     end
 
     def y_size(geo_transform, lower_right_y)
-      ((lower_right_y - geo_transform.y_origin) / geo_transform.pixel_height + 0.5).to_i
+      (((lower_right_y - geo_transform.y_origin) / geo_transform.pixel_height) + 0.5).to_i
     end
   end
 end

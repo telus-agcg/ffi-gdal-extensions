@@ -17,6 +17,10 @@ Format for this file derived from [http://keepachangelog.com](http://keepachange
 
 - [DEV-361] Move extension methods from ffi-gdal to ffi-gdal-extensions.
 
+### Fixed
+
+- [DEV-20247] Fix return value for `OGR::Layer::Extensions#point_values` when no features are found.
+
 ## 0.1.1 / 2016-12-29
 
 - Fix broken loading when `LWGEOM_LIBRARY_PATH` is specified

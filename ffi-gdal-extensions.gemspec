@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.required_ruby_version = '>= 2.6'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 
   spec.add_dependency 'bindata', '~> 2.0'
   spec.add_dependency 'ffi-gdal', '>= 1.0.0.beta6'
@@ -32,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'byebug'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_development_dependency 'rspec-github'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-performance'
   spec.add_development_dependency 'simplecov', '~> 0.9'
