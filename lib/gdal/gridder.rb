@@ -279,8 +279,8 @@ module GDAL
     # @return [Array<Integer, Integer>] The min and max values based on the given
     #   parameters.
     def build_grid_extents(min, pixel_size, offset, request_size)
-      grid_min = min + pixel_size * offset
-      grid_max = min + pixel_size * (offset + request_size)
+      grid_min = min + (pixel_size * offset)
+      grid_max = min + (pixel_size * (offset + request_size))
 
       [grid_min, grid_max]
     end
