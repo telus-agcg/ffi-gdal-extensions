@@ -15,6 +15,7 @@ Format for this file derived from [http://keepachangelog.com](http://keepachange
 
 ### Added
 
+- [DEV-20059] Ensure `GDAL::RasterBandClassifier#equal_count_ranges` has a minimum spacing between breakpoints.
 - [DEV-361] Move extension methods from ffi-gdal to ffi-gdal-extensions.
 
 ### Fixed
