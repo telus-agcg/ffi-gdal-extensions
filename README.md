@@ -48,9 +48,22 @@ via homebrew, you might need to specify where to find the library; for example:
 LWGEOM_LIBRARY_PATH='/usr/local/opt/liblwgeom/lib' bundle exec rake spec
 ```
 
+...for GDAL2:
+
+```sh
+docker-compose run gdal2 bundle exec rake spec
+```
+
+...for GDAL3:
+
+```sh
+docker-compose run gdal3 bundle exec rake spec
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-https://github.com/agrian-inc/ffi-gdal-extensions. This project is intended to be a safe, welcoming
-space for collaboration, and contributors are expected to adhere to the
-[Contributor Covenant](http://contributor-covenant.org) code of conduct.
+https://github.com/agrian-inc/ffi-gdal-extensions. This project is intended to be
+a safe, welcoming space for collaboration, and contributors are expected to
+adhere to the [Contributor Covenant](http://contributor-covenant.org) code of
+conduct.
