@@ -7,22 +7,7 @@ module FFI
   module LWGeom
     extend ::FFI::Library
 
-    # @param [String] lib Name of the library file to find.
-    # @return [String] Path to the library file.
-    def self.find_lib(lib)
-      lib_file_name = "#{lib}.#{FFI::Platform::LIBSUFFIX}*"
-
-      return Dir.glob(File.join(ENV['LWGEOM_LIBRARY_PATH'], lib_file_name)).first if ENV['LWGEOM_LIBRARY_PATH']
-
-      FFI::GDAL.search_paths.flat_map do |search_path|
-        Dir.glob(search_path).flat_map do |path|
-          Dir.glob(File.join(path, lib_file_name))
-        end
-      end.uniq.first
-    end
-
-    LIB_PATH = find_lib('liblwgeom').freeze
-    ffi_lib(::FFI::CURRENT_PROCESS, LIB_PATH) if LIB_PATH
+    ffi_lib(::FFI::CURRENT_PROCESS, ENV.fetch('LWGEOM_LIBRARY_PATH', 'lwgeom'))
 
     VARIANT_WKB_ISO       = 0x01
     VARIANT_WKB_SFSQL     = 0x02

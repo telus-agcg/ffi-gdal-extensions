@@ -20,6 +20,7 @@ Format for this file derived from [http://keepachangelog.com](http://keepachange
 
 ### Fixed
 
+- [DEV-34269] Ensure `GDAL::RasterBandClassifier#equal_count_ranges` returns a range when only one is requested.
 - [DEV-20247] Fix return value for `OGR::Layer::Extensions#point_values` when no features are found.
 
 ## 0.1.1 / 2016-12-29
