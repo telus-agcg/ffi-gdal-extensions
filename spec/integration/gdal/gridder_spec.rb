@@ -14,7 +14,7 @@ RSpec.describe 'GDAL::Gridder', type: :integration do
     dataset.close if File.exist?(output_file_name)
 
     Dir.glob("#{output_file_name}*").each do |file|
-      File.unlink(file) if File.exist?(file)
+      FileUtils.rm_f(file)
     end
   end
 

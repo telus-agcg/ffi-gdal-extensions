@@ -1,8 +1,6 @@
 name: Continuous Integration
-
 on:
   push:
-
 jobs:
   test:
     name: Test
@@ -10,32 +8,49 @@ jobs:
       fail-fast: false
       matrix:
         ruby: [ 2.6, 2.7, '3.0', 3.1 ]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          sudo wget -qO /etc/apt/trusted.gpg.d/pgdg.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -sc)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get install libgeos-dev liblwgeom-dev libproj-dev
+      - name: Cache GDAL Build
+        id: cache-gdal-build
+        uses: actions/cache@v3
+        with:
+          path: gdal-2.4.4
+          key: ${{ runner.os }}-gdal
+      - name: Build GDAL
+        if: steps.cache-gdal-build.outputs.cache-hit != 'true'
+        run: |
+          wget https://download.osgeo.org/gdal/2.4.4/gdal-2.4.4.tar.gz
+          tar xvzf gdal-2.4.4.tar.gz
+          cd gdal-2.4.4
+          ./configure
+          make -j2
+      - name: Install GDAL
+        working-directory: gdal-2.4.4
+        run: sudo make install
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgdal-dev liblwgeom-dev
-          bundle install --jobs 4 --retry 3
+          cache-version: 1
       - name: Run tests
         run: bundle exec rspec --format RSpec::Github::Formatter --format progress
 
   static_analysis:
     name: Rubocop
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Install dependencies
-        run: bundle install --jobs 4 --retry 3
       - name: Rubocop
         run: bundle exec rubocop --format github --parallel
