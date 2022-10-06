@@ -16,7 +16,7 @@ jobs:
           sudo wget -qO /etc/apt/trusted.gpg.d/pgdg.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
           echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -sc)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update
-          sudo apt-get install libgeos-dev liblwgeom-dev libproj-dev
+          sudo apt-get install libgeos-dev librttopo-dev libproj-dev
       - name: Cache GDAL Build
         id: cache-gdal-build
         uses: actions/cache@v3
