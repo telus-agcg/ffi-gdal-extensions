@@ -2,10 +2,11 @@
 
 Format for this file derived from [http://keepachangelog.com](http://keepachangelog.com).
 
-## Unreleased
+## 0.3.0 - 2022-10-07
 
 ### Changed
 
+- _BREAKING_: Removed `lwgeom` support in favor `rttopo`. `librttopo` is now a dependency.
 - _BREAKING_: Renamed `OGR::GeometryExtensions::EWKBIO` to `OGR::Geometry::EWKBIOExtensions`.
 - _BREAKING_: Renamed `OGR::GeometryExtensions::EWKBRecord` to `OGR::Geometry::EWKBRecord`.
 - _BREAKING_: Renamed `OGR::GeometryExtensions::LWGeomWrapper` to `OGR::Geometry::LWGeomExtensions`.
