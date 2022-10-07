@@ -4,7 +4,7 @@ require 'ffi'
 require_relative 'gbox'
 
 module FFI
-  module LWGeom
+  module Rttopo
     class Geom < FFI::Struct
       layout :type, :uint8,
              :flags, :uint8,

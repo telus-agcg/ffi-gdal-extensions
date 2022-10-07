@@ -3,7 +3,7 @@
 require 'ffi'
 
 module FFI
-  module LWGeom
+  module Rttopo
     class GBOX < FFI::Struct
       layout :flags, :uint8,
              :xmin, :double,
