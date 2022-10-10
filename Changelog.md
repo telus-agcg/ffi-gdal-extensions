@@ -2,7 +2,19 @@
 
 Format for this file derived from [http://keepachangelog.com](http://keepachangelog.com).
 
-## 0.3.0 - 2022-10-07
+## 1.0.0 - 2022-10-10
+
+### Changed
+
+- See 0.3.1 and 0.3.0 changes.
+
+## 0.3.1 - 2022-10-10 [YANKED]
+
+### Fixed
+
+- Load path error
+
+## 0.3.0 - 2022-10-07 [YANKED]
 
 ### Changed
 

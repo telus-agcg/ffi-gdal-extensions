@@ -8,6 +8,7 @@
 /spec/reports/
 /tmp/
 !/tmp/.keep
+*.gem
 
 .byebug_history
 
