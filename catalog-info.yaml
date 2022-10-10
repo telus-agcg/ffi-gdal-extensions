@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: null
+metadata:
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: agrian-inc/ffi-gdal-extensions
+  description: null
+  links:
+  - title: source code location
+    url: https://github.com/agrian-inc/ffi-gdal-extensions
+  name: ffi-gdal-extensions
+  tags:
+  - ruby
+  - agriannextgen
+  - static
+  - agribusiness
+spec:
+  consumesApis: []
+  lifecycle: production
+  owner: user:turboladen
+  providesApis: []
+  type: Library
