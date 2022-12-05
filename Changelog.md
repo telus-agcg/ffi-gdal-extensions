@@ -2,6 +2,12 @@
 
 Format for this file derived from [http://keepachangelog.com](http://keepachangelog.com).
 
+## [unreleased]
+
+### [Removed]
+
+- Everything moved back to `ffi-gdal` for 1.0 release.
+
 ## 0.3.0 - 2022-10-07
 
 ### Changed
